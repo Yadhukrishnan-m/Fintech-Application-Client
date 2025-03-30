@@ -16,6 +16,7 @@ interface Loan {
   minimumInterest: number;
   maximumInterest: number;
   duePenalty: number;
+  gracePeriod:number;
   features: string;
   eligibility: string;
   loanImage: string;
@@ -102,6 +103,13 @@ export default function LoanList({ loans }: LoanListProps) {
                   <span className="text-gray-600">Interest:</span>{" "}
                   <span className="font-medium text-teal-800">
                     {loan.minimumInterest}% - {loan.maximumInterest}%
+                  </span>
+                </div>
+
+                <div className="bg-teal-50 px-3 py-1 rounded text-sm">
+                  <span className="text-gray-600">Grace Period:</span>{" "}
+                  <span className="font-medium text-teal-800">
+                    {loan.gracePeriod}
                   </span>
                 </div>
               </div>

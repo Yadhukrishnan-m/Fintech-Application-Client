@@ -8,6 +8,7 @@ interface User {
   phone?: number;
   finscore?: number;
   status: "pending" | "completed" | "rejected" | "verified";
+  message?: string;
 }
 
 interface ProfileHeaderProps {
@@ -35,9 +36,7 @@ function ProfileHeader({ user }: ProfileHeaderProps) {
           <h1 className="text-3xl font-bold text-gray-800">
             {user?.name || "Loading..."}
           </h1>
-          <p className="text-gray-500 mt-1">
-            Customer ID: {user?.customerId }
-          </p>
+          <p className="text-gray-500 mt-1">Customer ID: {user?.customerId}</p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             {user?.email && (
@@ -57,7 +56,7 @@ function ProfileHeader({ user }: ProfileHeaderProps) {
           {user && (
             <div className="mt-8 inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-full font-medium shadow-md hover:bg-teal-700 transition-colors">
               <Award className="h-5 w-5 mr-2" />
-              <span>FinScore: {user.finscore }</span>
+              <span>FinScore: {user.finscore}</span>
             </div>
           )}
 
@@ -76,16 +75,19 @@ function ProfileHeader({ user }: ProfileHeaderProps) {
               </button>
             )}
             {user?.status === "rejected" && (
-              <button
-                className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium shadow-md hover:bg-red-600 transition-colors"
-                onClick={() =>
-                  navigate("/dashboard/profile/complete-profile", {
-                    state: { from: "rejected" },
-                  })
-                }
-              >
-                Update Documents & Retry Verification
-              </button>
+              <>
+              <p className="text-red-500">Reason for rejection:- {user?.message}</p>
+                <button
+                  className="px-6 py-2 bg-red-500 text-white rounded-lg font-medium shadow-md hover:bg-red-600 transition-colors"
+                  onClick={() =>
+                    navigate("/dashboard/profile/complete-profile", {
+                      state: { from: "rejected" },
+                    })
+                  }
+                >
+                  Update Documents & Retry Verification
+                </button>
+              </>
             )}
             {user?.status === "completed" && (
               <p className="text-blue-600 font-semibold">

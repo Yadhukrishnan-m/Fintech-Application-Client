@@ -26,11 +26,13 @@
     Mail,
     AlertCircle,
     Loader2,
+    X,
   } from "lucide-react";
   import adminAxiosInstance from "@/config/AdminAxiosInstence";
   import { useNavigate, useParams } from "react-router-dom";
   import AlertDialog from "../shared/AlertDialog";
   import { ErrorToast, SuccessToast } from '../shared/Toast'
+import { Textarea } from "../ui/textarea";
   // Define the customer data type
   enum CustomerStatus {
     PENDING = "pending",
@@ -78,7 +80,8 @@
     );
     const [isBlacklistAlertOpen, setIsBlacklistAlertOpen] = useState(false);
     const [isBlacklisting, setIsBlacklisting] = useState<boolean | null>(null);
-
+ const [showRejectionForm, setShowRejectionForm] = useState(false);
+ const [rejectionReason, setRejectionReason] = useState("");
     const { id } = useParams();
     const navigate = useNavigate();
     // Fetch data on component mount and on every re-render
@@ -111,6 +114,7 @@
       try {
         const response = await adminAxiosInstance.patch(`/verify-user/${id}`, {
           status: actionType === "verify" ? true : false,
+          message: actionType === "reject" ? rejectionReason : undefined,
         });
 
         if (response.data.success) {
@@ -321,7 +325,9 @@
 
                             <div className="flex items-center gap-2">
                               <IndianRupee className="h-4 w-4 text-gray-500" />
-                              <span className="text-sm font-medium">Income:</span>
+                              <span className="text-sm font-medium">
+                                Income:
+                              </span>
                               <span className="text-sm">
                                 ₹{customer.income.toLocaleString()}
                               </span>
@@ -341,7 +347,9 @@
                               <span className="text-sm font-medium">
                                 FinScore:
                               </span>
-                              <span className="text-sm">{customer.finscore}</span>
+                              <span className="text-sm">
+                                {customer.finscore}
+                              </span>
                             </div>
 
                             <div className="flex items-center gap-2">
@@ -428,7 +436,9 @@
                         <DialogTrigger asChild>
                           <div
                             className="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-                            onClick={() => setSelectedImage(customer.aadhaarDoc)}
+                            onClick={() =>
+                              setSelectedImage(customer.aadhaarDoc)
+                            }
                           >
                             <div className="p-2 bg-gray-50 border-b">
                               <h4 className="text-sm font-medium">
@@ -561,24 +571,72 @@
           </CardContent>
 
           {mode === "verification" && (
-            <CardFooter className="flex justify-end gap-3 pt-4 border-t">
-              <Button
-                variant="outline"
-                className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
-                onClick={handleReject}
-              >
-                <XCircle className="mr-2 h-4 w-4" />
-                Reject Profile
-              </Button>
-              <Button
-                className="bg-teal-600 hover:bg-teal-700 text-white"
-                onClick={handleVerify}
-              >
-                <CheckCircle className="mr-2 h-4 w-4" />
-                Verify Profile
-              </Button>
+            // <CardFooter className="flex justify-end gap-3 pt-4 border-t">
+            //   <Button
+            //     variant="outline"
+            //     className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800"
+            //     onClick={handleReject}
+            //   >
+            //     <XCircle className="mr-2 h-4 w-4" />
+            //     Reject Profile
+            //   </Button>
+            //   <Button
+            //     className="bg-teal-600 hover:bg-teal-700 text-white"
+            //     onClick={handleVerify}
+            //   >
+            //     <CheckCircle className="mr-2 h-4 w-4" />
+            //     Verify Profile
+            //   </Button>
+            // </CardFooter>
+
+            <CardFooter className="flex justify-end space-x-4 bg-gray-50 py-4">
+              {showRejectionForm ? (
+                <div className="w-full space-y-3">
+                  <Textarea
+                    placeholder="Please provide a reason for rejection..."
+                    value={rejectionReason}
+                    onChange={(e) => setRejectionReason(e.target.value)}
+                    className="w-full border-teal-200 focus:border-teal-300 focus:ring-teal-200"
+                  />
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowRejectionForm(false)}
+                      className="bg-white border-teal-500 text-teal-600 hover:bg-teal-50"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleReject}
+                      disabled={rejectionReason.trim() === ""}
+                      className="bg-white border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
+                    >
+                      Confirm Rejection
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    className="bg-white border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
+                    onClick={() => setShowRejectionForm(true)}
+                  >
+                    <X className="mr-2 h-4 w-4" />
+                    Reject
+                  </Button>
+                  <Button
+                    className="bg-white border-teal-500 text-teal-600 hover:bg-teal-50 hover:text-teal-700"
+                    onClick={handleVerify}
+                  >
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Approve
+                  </Button>
+                </>
+              )}
             </CardFooter>
           )}
+          <CardFooter />
           {mode === "details" && (
             <CardFooter className="flex justify-end gap-3 pt-4 border-t">
               <Button

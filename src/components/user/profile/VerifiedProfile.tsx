@@ -9,10 +9,12 @@ import {
   FileText,
   Shield,
   Award,
+  Lock,
 } from "lucide-react";
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 interface VerifiedUserData {
   _id: string;
@@ -45,6 +47,7 @@ export default function VerifiedProfileDetails({
   userData,
 }: VerifiedProfileDetailsProps) {
  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+ const navigate=useNavigate()
   return (
     <div className="space-y-8 mb-10">
       {/* Personal Information Section */}
@@ -89,6 +92,14 @@ export default function VerifiedProfileDetails({
               <p className="font-medium text-gray-800">{userData.customerId}</p>
             </div>
           </div>
+        </div>
+        <div className="p-6 border-t flex justify-end">
+          <button
+            onClick={() => navigate("/dashboard/change-password")}
+            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center">
+            <Lock className="h-5 w-5 mr-2" />
+            Change Password
+          </button>
         </div>
       </div>
 

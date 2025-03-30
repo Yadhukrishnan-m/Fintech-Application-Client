@@ -57,7 +57,7 @@ console.log(response.data);
             <UserLoanListCard
               key={loan._id}
               loan={loan}
-              onViewDetails={() => navigate(`/dashboard/loans/${loan._id}`)}
+              onViewDetails={() => navigate(`/dashboard/loan/${loan._id}`)}
             />
           ))
         )}

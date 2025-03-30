@@ -790,6 +790,11 @@ const formSchema = z
     minimum_interest: z.coerce
       .number()
       .min(1, { message: "Minimum interest cannot be negative." }),
+    gracePeriod: z.coerce
+      .number()
+      .min(0, { message: "cant have negative values" })
+      .max(10, { message: "meximon 10 days are alowed as grace period" })
+      .int({ message: "Grace period must be a whole number" }),
     maximum_interest: z.coerce
       .number()
       .positive({ message: "Maximum interest must be positive." })
@@ -847,6 +852,7 @@ type LoanData = {
   minimumInterest: number;
   maximumInterest: number;
   duePenalty: number;
+  gracePeriod:number;
   features: string;
   eligibility: string;
   loanImage?: string;
@@ -886,6 +892,7 @@ export default function LoanForm({
             maximum_interest: loanData.maximumInterest,
             due_penalty: loanData.duePenalty,
             features: loanData.features,
+            gracePeriod: loanData.gracePeriod,
             eligibility: loanData.eligibility,
             additional_documents: loanData.additionalDocuments || [],
           }
@@ -902,6 +909,7 @@ export default function LoanForm({
             due_penalty: 0,
             features: "",
             eligibility: "",
+            gracePeriod: 0,
             additional_documents: [],
           },
   });
@@ -949,6 +957,7 @@ export default function LoanForm({
       formData.append("maximumInterest", data.maximum_interest.toString());
       formData.append("duePenalty", data.due_penalty.toString());
       formData.append("features", data.features);
+      formData.append("gracePeriod", data.gracePeriod.toString());
       formData.append("eligibility", data.eligibility);
 
       // Add additional documents
@@ -1247,6 +1256,27 @@ export default function LoanForm({
                   <FormItem>
                     <FormLabel className="text-gray-700">
                       Due Penalty (%)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...field}
+                        className="border-gray-200 focus:border-gray-300 focus:ring-gray-300"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="gracePeriod"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">
+                      Grace Period
                     </FormLabel>
                     <FormControl>
                       <Input

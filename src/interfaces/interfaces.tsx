@@ -101,10 +101,10 @@ export interface IUserLoan {
   interest: number;
   duePenalty: number;
   tenure: number;
+  gracePeriod:number
   nextDueDate: string; 
   createdAt: string;
-  updatedAt: string;
-  __v: number;
+  
 }
 export interface IUserLoanPopulated {
   _id: string;
@@ -119,4 +119,28 @@ export interface IUserLoanPopulated {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+
+export interface ITransaction {
+  transactionId: string;
+  userId: string
+  userLoanId: string
+  amount: number;
+  interestAmount?: number;
+  penaltyAmount?: number;
+  paymentStatus: string;
+  createdAt:string
+  type: string;
+}
+
+export interface IEMI {
+  emiNumber: number;
+  amount: number;
+  dueDate: Date;
+  status: "upcoming" | "grace" | "overdue" | "paid";
+  penalty: number;
+  transaction: ITransaction | null;
+  gracePeriodEndDate:Date
+  canPay: boolean;
 }
