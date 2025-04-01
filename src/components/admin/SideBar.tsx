@@ -56,7 +56,7 @@ const UserSidebar: React.FC = () => {
     },
     { path: "/admin/loans", icon: CreditCard, label: "Loans" },
     { path: "/admin/application", icon: FileText, label: "Applications" },
-    { path: "/admin/users2", icon: Repeat, label: "Transactions" },
+    { path: "/admin/capital-transaction", icon: Repeat, label: "Capital&Transactions" },
   ];
 
   const bottomMenuItems: MenuItem[] = [

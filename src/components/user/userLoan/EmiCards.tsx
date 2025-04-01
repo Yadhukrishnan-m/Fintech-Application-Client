@@ -29,6 +29,7 @@ interface EMITimelineProps {
 export default function EMITimeline({ emis = [], onPayEMI }: EMITimelineProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+console.log(emis);
 
   // Find the first payable EMI index or first overdue/grace period EMI
   useEffect(() => {
@@ -206,11 +207,21 @@ export default function EMITimeline({ emis = [], onPayEMI }: EMITimelineProps) {
                         ₹{emi.amount.toFixed(2)}
                       </h3>
                     </div>
-
-                    <div className="flex items-center gap-2 text-white/90 mb-2">
-                      <Calendar className="h-4 w-4" />
-                      <span className="text-sm">{formatDate(emi.dueDate)}</span>
-                    </div>
+                  
+                    {emi.status === "paid" && emi.transaction?.transactionId ? (
+                      <div className="flex items-center gap-2 text-white/90 mb-2">
+                        <p className="text-xs">
+                          transaction id : {emi.transaction.transactionId}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-white/90 mb-2">
+                        <Calendar className="h-4 w-4" />
+                        <span className="text-sm">
+                          {formatDate(emi.dueDate)}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Card Content */}
@@ -250,7 +261,7 @@ export default function EMITimeline({ emis = [], onPayEMI }: EMITimelineProps) {
                         }}
                       >
                         <CreditCard className="h-4 w-4" />
-                        Pay Rs.{(emi.amount+emi.penalty).toFixed(2)} Now 
+                        Pay Rs.{(emi.amount + emi.penalty).toFixed(2)} Now
                       </Button>
                     ) : emi.status === "paid" ? (
                       <div className="w-full bg-white/20 text-white text-center py-2 rounded-md">
