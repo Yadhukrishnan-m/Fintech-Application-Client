@@ -97,14 +97,14 @@ export interface IUserLoan {
   userId: string;
   loanId: string;
   applicationId: string;
+  userLoanId:string
   amount: number;
   interest: number;
   duePenalty: number;
   tenure: number;
-  gracePeriod:number
-  nextDueDate: string; 
+  gracePeriod: number;
+  nextDueDate: string;
   createdAt: string;
-  
 }
 export interface IUserLoanPopulated {
   _id: string;
@@ -112,6 +112,7 @@ export interface IUserLoanPopulated {
   loanId: ILoan;
   applicationId: string;
   amount: number;
+  userLoanId:string;
   interest: number;
   duePenalty: number;
   tenure: number;
@@ -123,9 +124,10 @@ export interface IUserLoanPopulated {
 
 
 export interface ITransaction {
+  _id:string
   transactionId: string;
-  userId: string
-  userLoanId: string
+  userId: IUser
+  userLoanId:  IUserLoanPopulated
   amount: number;
   interestAmount?: number;
   penaltyAmount?: number;
@@ -144,3 +146,4 @@ export interface IEMI {
   gracePeriodEndDate:Date
   canPay: boolean;
 }
+

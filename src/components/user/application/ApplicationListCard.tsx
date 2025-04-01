@@ -38,7 +38,7 @@ const ApplicationListCard: React.FC<LoanCardProps> = ({
       {/* Loan Information */}
       <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
         <CreditCard className="h-6 w-6 text-teal-200" />
-        Loan Details
+        Application Details
       </h3>
 
       <div className="space-y-2">

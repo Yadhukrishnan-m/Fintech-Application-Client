@@ -11,6 +11,7 @@ import ApplicationDetailsPage from "@/pages/user/ApplicationDetailsPage";
 import UserLoanListPage from "@/pages/user/UserLoanListPage";
 import ChangePassword from "@/components/user/profile/ChangePassword";
 import EmiListPage from "@/pages/user/EmiListPage";
+import TransactionPage from "@/pages/user/TransactionPage";
 // import LoanListingPage from "@/pages/user/LoanListingPage";
 export default function ProfileAndDashboard() {
   return (
@@ -35,10 +36,16 @@ export default function ProfileAndDashboard() {
               element={<ApplicationDetailsPage />}
             />
 
-            <Route
+            <Route path="/loan/:id" element={<EmiListPage />} />
+            <Route path="/transactions" element={<TransactionPage />} />
+            {/* <Route
               path="/loan/:id"
               element={<EmiListPage />}
             />
+             <Route
+              path="/loan/:id"
+              element={<EmiListPage />}
+            /> */}
           </Routes>
         </div>
       </div>

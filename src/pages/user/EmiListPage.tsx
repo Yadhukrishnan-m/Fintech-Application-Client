@@ -10,6 +10,7 @@ import {  useParams } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 // import { ErrorToast } from "@/components/shared/Toast";
 import { IEMI, IUserLoan } from "@/interfaces/interfaces";
+import { initiateRazorpayPayment } from "@/utils/razorpayHelper";
 
 const defaultUserLoan: IUserLoan = {
   userId: "",
@@ -18,6 +19,7 @@ const defaultUserLoan: IUserLoan = {
   createdAt: new Date().toISOString(),
   _id: "",
   amount: 0,
+  userLoanId:'',
   interest: 0,
   tenure: 0,
   nextDueDate: new Date().toISOString(),
@@ -60,17 +62,20 @@ console.log(emis);
 
   const handlePayEMI = async() => {
     try {
-      const response = await userAxiosInstance.get(`/emi-payment/${id}`);
+      const response = await userAxiosInstance.get(
+        `/razorpay/create-order/${id}`
+      );
+      console.log(response.data);
       
       if (response.data.success) {
-        fetchApplications();
+        const { orderId, totalAmount } = response.data;
+             await initiateRazorpayPayment(orderId, totalAmount, id!);
       }
+      fetchApplications();
     } catch (error) {
       console.log(error);
     } 
-    
-
-  };
+  }
 
   if (loading || !userLoan) {
     <Loader message="loading"/>
@@ -87,12 +92,13 @@ console.log(emis);
   return (
     <div className="container mx-auto py-8 px-4 bg-gradient-to-b from-teal-50 to-white min-h-screen">
       <h1 className="text-3xl font-bold text-teal-800 mb-2">Loan Repayment</h1>
+      <p className="text-teal-600 "> userLoanId : {userLoan.userLoanId}</p>
       <p className="text-teal-600 mb-8">Track and manage your EMI payments</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card className="p-5 border-teal-100 shadow-sm bg-white">
           <h3 className="text-sm font-medium text-teal-600 mb-1">
-            Total Loan Amount
+            Total  Amount to pay
           </h3>
           <p className="text-2xl font-bold text-teal-900">
             ₹{totalAmount.toFixed(2)}
@@ -101,7 +107,7 @@ console.log(emis);
 
         <Card className="p-5 border-teal-100 shadow-sm bg-white">
           <h3 className="text-sm font-medium text-teal-600 mb-1">
-            Paid Amount
+            Paid Amount (excluding penalty)
           </h3>
           <p className="text-2xl font-bold text-teal-900">
             ₹{paidAmount.toFixed(2)}

@@ -13,6 +13,7 @@ import EditLoanPage from "@/pages/admin/EditLoanPage";
 import LoanDetailsPage from "@/pages/admin/LoanDetailsPage";
 import ApplicationListPage from "@/pages/admin/ApplicationListPage";
 import ApplicationDetailsPage from "@/pages/admin/ApplicationDetailsPage";
+import CapitalAndTransactionsPage from "@/pages/admin/CapitalAndTransactionsPage";
 
 const AdminPages: FC = () => {
   return (
@@ -26,6 +27,10 @@ const AdminPages: FC = () => {
           <Route path="users" element={<UserListPage />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="application" element={<ApplicationListPage />} />
+          <Route
+            path="capital-transaction"
+            element={<CapitalAndTransactionsPage />}
+          />
           <Route
             path="User-verification"
             element={<UserVerificationListPage />}
