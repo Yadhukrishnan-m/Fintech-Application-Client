@@ -113,16 +113,18 @@ const UserSidebar: React.FC = () => {
           <div
             role="button"
             tabIndex={0}
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
             className="w-24 h-24 cursor-pointer bg-teal-700 text-white rounded-full flex items-center justify-center text-xl font-semibold"
           >
-            Home
+            Quicfin
           </div>
         </div>
 
         {/* Navigation Menu */}
         <nav className="flex-grow">
-          <ul className="space-y-2 p-4">{menuItems.map(renderMenuItem)}</ul>
+          <ul className="space-y-2 p-4 ">
+            {menuItems.map(renderMenuItem)}
+          </ul>
         </nav>
 
         {/* Bottom Menu (Logout) */}

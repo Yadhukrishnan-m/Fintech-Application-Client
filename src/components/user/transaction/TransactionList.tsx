@@ -46,7 +46,7 @@ export default function TransactionList() {
     });
 
     setTransactions(response.data.transactions);
-    setTotalPages(response.data.transactions.totalPages || 1);
+    setTotalPages(response.data.totalPages || 1);
   } catch (error) {
     console.log(error);
     setError("Failed to fetch users. Please try again.");

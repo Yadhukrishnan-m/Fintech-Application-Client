@@ -29,7 +29,7 @@ interface EMITimelineProps {
 export default function EMITimeline({ emis = [], onPayEMI }: EMITimelineProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-console.log(emis);
+
 
   // Find the first payable EMI index or first overdue/grace period EMI
   useEffect(() => {

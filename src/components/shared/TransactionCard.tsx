@@ -118,20 +118,37 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
               <CreditCard className="h-5 w-5 text-teal-600" />
             </div>
             <div>
-              <p className="text-xs">Transaction ID</p>
-              <p className="font-medium text-sm text-gray-900">
-                {transaction.transactionId}
-              </p>
-              <p className="text-xs text-gray-500">
-                {transaction.userLoanId.loanId.name}
-              </p>
-              <p className="text-xs">
-                user loan ID : {transaction.userLoanId.userLoanId}{" "}
-              </p>
-              {role == "admin" && (
-                <p className="text-xs">
-                  user ID : {transaction.userId.customerId}
-                </p>
+              {transaction.transactionId && (
+                <>
+                  <p className="text-xs">Transaction ID</p>
+                  <p className="font-medium text-sm text-gray-900">
+                    {transaction.transactionId}
+                  </p>
+                </>
+              )}
+
+              {transaction.userLoanId?.loanId?.name && (
+                <>
+                  <p className="text-xs text-gray-500">
+                    {transaction.userLoanId.loanId.name}
+                  </p>
+                </>
+              )}
+
+              {transaction.userLoanId?.userLoanId && (
+                <>
+                  <p className="text-xs">
+                    user loan ID : {transaction.userLoanId.userLoanId}{" "}
+                  </p>
+                </>
+              )}
+
+              {role === "admin" && transaction.userId?.customerId && (
+                <>
+                  <p className="text-xs">
+                    user ID : {transaction.userId.customerId}
+                  </p>
+                </>
               )}
             </div>
           </div>

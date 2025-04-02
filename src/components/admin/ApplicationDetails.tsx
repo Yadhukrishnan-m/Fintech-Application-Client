@@ -22,7 +22,8 @@ import { ILoanApplication } from "../../interfaces/interfaces";
 import AlertDialog from "../shared/AlertDialog";
 import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import { useNavigate } from "react-router-dom";
-import { SuccessToast } from "../shared/Toast";
+import { ErrorToast, SuccessToast } from "../shared/Toast";
+import { AxiosError } from "axios";
 interface ApplicationDetailsProps {
   applicationData: ILoanApplication;
 }
@@ -66,6 +67,10 @@ setLoading(true)
         }
       } catch (error) {
         console.log(error);
+       if (error instanceof AxiosError) {
+               ErrorToast(error.response!.data.message);
+              
+             }
       } finally {
         setIsAlertOpen(false);
         setLoading(false);
