@@ -1,4 +1,4 @@
-"use client";
+ ;
 
 import { useCallback, useEffect, useState } from "react";
 import EMITimeline from "../../components/user/userLoan/EmiCards";
@@ -82,10 +82,10 @@ console.log(emis);
   }
 
   // Calculate loan statistics
-  const totalAmount = emis.reduce((sum, emi) => sum + emi.amount, 0);
+  const totalAmount = emis.reduce((sum, emi) => sum + emi.amount+emi.penalty, 0);
   const paidAmount = emis
     .filter((emi) => emi.status === "paid")
-    .reduce((sum, emi) => sum + emi.amount, 0);
+    .reduce((sum, emi) => sum + emi.amount +emi.penalty, 0);
   const remainingAmount = totalAmount - paidAmount;
   const completionPercentage = Math.round((paidAmount / totalAmount) * 100);
 
@@ -98,7 +98,7 @@ console.log(emis);
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card className="p-5 border-teal-100 shadow-sm bg-white">
           <h3 className="text-sm font-medium text-teal-600 mb-1">
-            Total  Amount to pay
+            Total Amount to pay (including penalty)
           </h3>
           <p className="text-2xl font-bold text-teal-900">
             ₹{totalAmount.toFixed(2)}
@@ -107,7 +107,7 @@ console.log(emis);
 
         <Card className="p-5 border-teal-100 shadow-sm bg-white">
           <h3 className="text-sm font-medium text-teal-600 mb-1">
-            Paid Amount (excluding penalty)
+            Paid Amount (including penalty)
           </h3>
           <p className="text-2xl font-bold text-teal-900">
             ₹{paidAmount.toFixed(2)}
@@ -116,7 +116,7 @@ console.log(emis);
 
         <Card className="p-5 border-teal-100 shadow-sm bg-white">
           <h3 className="text-sm font-medium text-teal-600 mb-1">
-            Remaining Amount
+            Remaining Amount (including penalty)
           </h3>
           <p className="text-2xl font-bold text-teal-900">
             ₹{remainingAmount.toFixed(2)}

@@ -1,18 +1,32 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
- import store from "@/redux/store";
-// import userAxiosInstance from "@/config/UserAxiosInstence";
+import store from "@/redux/store";
+import { BellIcon } from "lucide-react";
+import userAxiosInstance from "@/config/UserAxiosInstence";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const userId = store.getState().userTokenSlice.userToken;
-   
   const navigate = useNavigate();
+  const [totalUnreadedcount,setTotalUnreadedcount]=useState(0)
+
+   const totalUnreaded = useCallback(async () => {
+     try {
+     const response=  await userAxiosInstance.get("/total-unreaded");
+        
+       setTotalUnreadedcount(response.data.totalNotifications);
+     } catch (error) {
+       console.error("Error fetching notifications:", error);
+     }
+   }, []);
+
+   useEffect(() => {
+     totalUnreaded();
+   }, [totalUnreaded]);
+
 
   return (
-  
     <header className="w-full py-4 bg-white border-b">
-     
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center">
           <button
@@ -27,7 +41,6 @@ export default function Header() {
           {[
             { path: "/", label: "Home" },
             { path: "/loans", label: "Loans" },
-            // { path: "/investments", label: "Investments" },
             { path: "/about-us", label: "About Us" },
             { path: "/contact-us", label: "Contact Us" },
           ].map(({ path, label }) => (
@@ -42,6 +55,19 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-4">
+          {/* Desktop View: Bell Icon */}
+          <button
+            onClick={() => navigate("/notifications")}
+            className="relative text-gray-800 hover:text-teal-600 font-medium hidden md:flex items-center"
+          >
+            <BellIcon className="w-6 h-6" />
+            {totalUnreadedcount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {totalUnreadedcount}
+              </span>
+            )}
+          </button>
+
           {userId ? (
             <button
               onClick={() => navigate("/dashboard/profile")}
@@ -80,6 +106,7 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -121,6 +148,18 @@ export default function Header() {
               {label}
             </button>
           ))}
+
+          {/* Mobile View: Bell Icon */}
+          <button
+            onClick={() => navigate("/notifications")}
+            className="relative text-gray-800 hover:text-teal-600 font-medium flex md:hidden items-center"
+          >
+            <BellIcon className="w-6 h-6" />
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {totalUnreadedcount}
+            </span>
+          </button>
+
           {userId ? (
             <button
               onClick={() => navigate("/dashboard/profile")}

@@ -14,6 +14,9 @@ import LoanDetailsPage from "@/pages/admin/LoanDetailsPage";
 import ApplicationListPage from "@/pages/admin/ApplicationListPage";
 import ApplicationDetailsPage from "@/pages/admin/ApplicationDetailsPage";
 import CapitalAndTransactionsPage from "@/pages/admin/CapitalAndTransactionsPage";
+import UserLoanListPage from "@/pages/admin/UserLoanListPage";
+import { EmiDetails } from "@/pages/admin/EmiDetailsPage";
+import NotificationPage from "@/pages/admin/NotificationPage";
 
 const AdminPages: FC = () => {
   return (
@@ -32,6 +35,10 @@ const AdminPages: FC = () => {
             element={<CapitalAndTransactionsPage />}
           />
           <Route
+            path="notification"
+            element={<NotificationPage />}
+          />
+          <Route
             path="User-verification"
             element={<UserVerificationListPage />}
           />
@@ -45,7 +52,9 @@ const AdminPages: FC = () => {
           <Route path="/loans/edit-loan/:id" element={<EditLoanPage />} />
           <Route path="/loans/add-loan" element={<AddLoanPage />} />
           <Route path="/loans/loan-details/:id" element={<LoanDetailsPage />} />
+          <Route path="/user-loan/:userLoanId" element={<EmiDetails />} />
           <Route path="/application/:id" element={<ApplicationDetailsPage />} />
+          <Route path="userloan" element={<UserLoanListPage />} />
         </Routes>
       </div>
     </div>

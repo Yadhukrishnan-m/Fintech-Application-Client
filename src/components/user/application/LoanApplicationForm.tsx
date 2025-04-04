@@ -271,7 +271,7 @@ export default function LoanApplicationForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-1">
-      <Card className="w-full max-w-8xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
+      <Card className="w-full max-w-7xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
         <CardHeader className="border-b border-gray-100 bg-white">
           <div className="flex items-center">
             <div className="w-2 h-10 bg-teal-500 rounded-r mr-4"></div>

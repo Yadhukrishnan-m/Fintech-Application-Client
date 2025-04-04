@@ -10,6 +10,7 @@ import {
   LucideIcon,
   BarChart3,
   ShieldCheck,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -56,7 +57,13 @@ const UserSidebar: React.FC = () => {
     },
     { path: "/admin/loans", icon: CreditCard, label: "Loans" },
     { path: "/admin/application", icon: FileText, label: "Applications" },
-    { path: "/admin/capital-transaction", icon: Repeat, label: "Capital&Transactions" },
+    { path: "/admin/userloan", icon: FileSpreadsheet, label: "User-Loans" },
+    { path: "/admin/notification", icon: FileSpreadsheet, label: "Notifications" },
+    {
+      path: "/admin/capital-transaction",
+      icon: Repeat,
+      label: "Capital&Transactions",
+    },
   ];
 
   const bottomMenuItems: MenuItem[] = [

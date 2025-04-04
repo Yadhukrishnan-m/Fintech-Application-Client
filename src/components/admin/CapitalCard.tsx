@@ -53,7 +53,7 @@ const CapitalCard: React.FC = () => {
       </div>
       <div className="text-center py-6">
         <p className="text-teal-600 text-2xl font-bold">
-          Available Capital: {capital}
+          Available Capital: {(capital).toFixed(2)}
         </p>
       </div>
 

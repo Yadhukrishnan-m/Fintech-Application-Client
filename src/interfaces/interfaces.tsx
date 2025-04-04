@@ -140,10 +140,13 @@ export interface IEMI {
   emiNumber: number;
   amount: number;
   dueDate: Date;
-  status: "upcoming" | "grace" | "overdue" | "paid";
+  status: "upcoming" | "grace" | "overdue" | "paid" | "due";
   penalty: number;
   transaction: ITransaction | null;
   gracePeriodEndDate:Date
   canPay: boolean;
 }
+
+
+
 

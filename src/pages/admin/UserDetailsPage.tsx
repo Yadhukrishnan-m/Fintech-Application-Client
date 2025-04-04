@@ -1,3 +1,4 @@
+import LoansOfUser from "@/components/admin/LoansOfUser";
 import UserVerification from "@/components/admin/UserVerification";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
@@ -14,6 +15,7 @@ function UserDetailsPage() {
             ]}
           />
           <UserVerification mode={mode} />
+          <LoansOfUser/>
         </div>
       </div>
    

@@ -2,7 +2,7 @@ import React from "react";
 import { CreditCard, Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Clock } from "lucide-react";
 import { ITransaction } from "@/interfaces/interfaces";
 
@@ -178,7 +178,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
               {formatDate(transaction.createdAt)}
             </span>
           </div>
-          {role == "admin" && (
+          {/* {role == "admin" && (
             <div className="col-span-12 md:col-span-1 flex justify-end">
               <Button
                 variant="ghost"
@@ -188,7 +188,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
                 Details
               </Button>
             </div>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>

@@ -10,6 +10,7 @@ import ProfileAndDashboard from "./layouts/Profile&Dashboard";
 import LoanListingPage from "./pages/user/LoanListingPage";
 import LoanDetailsPage from "./pages/user/LoanDetailsPage";
 import LoanApplicationPage from "./pages/user/LoanApplicationPage";
+import NotificationPage from "./pages/user/NotificationPage";
 function User() {
   return (
     <>
@@ -49,6 +50,7 @@ function User() {
           }
         ></Route>
         <Route path="/loans" element={<LoanListingPage />} />
+        <Route path="/notifications" element={<NotificationPage />} />
         <Route path="/loan/:id" element={<LoanDetailsPage />} />
         <Route path="/loan/application/:id" element={<LoanApplicationPage />} />
 
