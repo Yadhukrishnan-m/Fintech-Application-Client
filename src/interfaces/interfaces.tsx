@@ -150,3 +150,35 @@ export interface IEMI {
 
 
 
+export interface IChat {
+  _id: string;
+  user_id: string;
+  admin_id: string;
+  last_message?: string;
+  last_message_at?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
+export interface IMessage {
+  _id:string
+  chat_id: string;
+  sender_id: string;
+  sender_model: "User" | "Admin";
+  content: string;
+  isread: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IChatUser {
+  _id: string; 
+  user: {
+    _id: string;
+    name: string;
+  };
+  last_message: string;
+  last_message_at: string;
+  unread_messages: number;
+}

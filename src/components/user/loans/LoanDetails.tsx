@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import userAxiosInstance from "@/config/UserAxiosInstence";
-import { CalendarDays, Check, Clock, DollarSign, Percent } from "lucide-react";
+import { CalendarDays, Check, Clock, DollarSign, Loader2, Percent } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,15 +31,19 @@ interface LoanDetailsProps {
 
 export default function LoanDetails({ loan ,interest}: LoanDetailsProps) {
   const [isBlacklisted, setIsBlacklisted] = useState(false);
-
+  const [user,setuser]=useState('')
+const [isloading,setisloading]=useState(false)
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setisloading(true)
         const response = await userAxiosInstance.get(`/get-user`);
         if (response.data.success) {
           console.log(response.data.user);
           
           setIsBlacklisted(response.data.user.isBlacklisted); 
+          setuser(response.data.user.status)
+          setisloading(false)
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -77,6 +81,18 @@ export default function LoanDetails({ loan ,interest}: LoanDetailsProps) {
   const eligibilityList = loan.eligibility
     .split(/\n|\./)
     .filter((item) => item.trim().length > 0);
+
+if (isloading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="flex flex-col items-center">
+        <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
+        <p className="mt-2 text-gray-600">Loading loan details...</p>
+      </div>
+    </div>
+  );
+}
+ 
 
   return (
     <div className="max-w-8xl mx-auto p-4">
@@ -179,8 +195,11 @@ export default function LoanDetails({ loan ,interest}: LoanDetailsProps) {
                 <button className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium shadow-md w-full cursor-not-allowed">
                   You are blacklisted, so you can't apply for a loan
                 </button>
-              ) : interest === "Not Verified" ? (
-                <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-md w-full">
+              ) : user !== "verified" ? (
+                <button
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-md w-full"
+                  onClick={() => navigate(`/dashboard/profile`)}
+                >
                   Only verified accounts can apply for a loan
                 </button>
               ) : (
@@ -257,6 +276,7 @@ export default function LoanDetails({ loan ,interest}: LoanDetailsProps) {
           </Card>
         </div>
       </div>
+      
     </div>
   );
 }

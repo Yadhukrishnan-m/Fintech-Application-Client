@@ -73,12 +73,12 @@ export default function LoanList({ loans }: LoanListProps) {
                 {/* {getShortDescription(loan.features)} */}
               </p>
               <Link to={`/loan/application/${loan._id}`}>
-                <Button
+                {/* <Button
                   variant="outline"
                   className="text-teal-600 border-teal-600 hover:bg-teal-50"
                 >
                   Apply now
-                </Button>
+                </Button> */}
               </Link>
             </div>
 

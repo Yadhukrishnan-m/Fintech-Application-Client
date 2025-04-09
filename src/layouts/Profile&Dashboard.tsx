@@ -12,6 +12,7 @@ import UserLoanListPage from "@/pages/user/UserLoanListPage";
 import ChangePassword from "@/components/user/profile/ChangePassword";
 import EmiListPage from "@/pages/user/EmiListPage";
 import TransactionPage from "@/pages/user/TransactionPage";
+import UserChatPage from "@/pages/user/UserChatPage";
 // import LoanListingPage from "@/pages/user/LoanListingPage";
 export default function ProfileAndDashboard() {
   return (
@@ -30,6 +31,7 @@ export default function ProfileAndDashboard() {
             />
             <Route path="applications" element={<ApplicationListPage />} />
             <Route path="loans" element={<UserLoanListPage />} />
+            <Route path="chat-support" element={<UserChatPage />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route
               path="/applications/:id"

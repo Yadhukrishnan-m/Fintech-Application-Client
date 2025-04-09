@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   LucideIcon,
+  MessagesSquare,
 } from "lucide-react";
 import { Button } from "../../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -48,6 +49,11 @@ const UserSidebar: React.FC = () => {
     { path: "/dashboard/loans", icon: CreditCard, label: "Loans" },
     { path: "/dashboard/applications", icon: FileText, label: "Applications" },
     { path: "/dashboard/transactions", icon: Repeat, label: "Transactions" },
+    {
+      path: "/dashboard/chat-support",
+      icon: MessagesSquare,
+      label: "Chat Support",
+    },
   ];
 
   const bottomMenuItems: MenuItem[] = [

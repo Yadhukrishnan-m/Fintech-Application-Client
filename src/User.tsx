@@ -11,6 +11,8 @@ import LoanListingPage from "./pages/user/LoanListingPage";
 import LoanDetailsPage from "./pages/user/LoanDetailsPage";
 import LoanApplicationPage from "./pages/user/LoanApplicationPage";
 import NotificationPage from "./pages/user/NotificationPage";
+import ContactUsPage from "./pages/user/ContactUsPage";
+import AboutUsPage from "./pages/user/AboutUsPage";
 function User() {
   return (
     <>
@@ -53,6 +55,8 @@ function User() {
         <Route path="/notifications" element={<NotificationPage />} />
         <Route path="/loan/:id" element={<LoanDetailsPage />} />
         <Route path="/loan/application/:id" element={<LoanApplicationPage />} />
+        <Route path="/contact-us" element={<ContactUsPage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
 
         <Route path="*" element={<h1>not found</h1>} />
       </Routes>

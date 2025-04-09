@@ -11,6 +11,7 @@ import {
   BarChart3,
   ShieldCheck,
   FileSpreadsheet,
+  MessagesSquareIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -58,7 +59,16 @@ const UserSidebar: React.FC = () => {
     { path: "/admin/loans", icon: CreditCard, label: "Loans" },
     { path: "/admin/application", icon: FileText, label: "Applications" },
     { path: "/admin/userloan", icon: FileSpreadsheet, label: "User-Loans" },
-    { path: "/admin/notification", icon: FileSpreadsheet, label: "Notifications" },
+    {
+      path: "/admin/notification",
+      icon: FileSpreadsheet,
+      label: "Notifications",
+    },
+    {
+      path: "/admin/chat-support",
+      icon: MessagesSquareIcon,
+      label: "Chat Support",
+    },
     {
       path: "/admin/capital-transaction",
       icon: Repeat,

@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import SideBar from "../components/admin/SideBar";
-import Dashboard from "@/components/admin/Dashboard";
 import UserVerificationPage from "@/pages/admin/UserVerificationPage";
 import UserVerificationListPage from "@/pages/admin/UserVerificationListPage";
 import UserListPage from "@/pages/admin/UserListPage";
@@ -17,6 +16,8 @@ import CapitalAndTransactionsPage from "@/pages/admin/CapitalAndTransactionsPage
 import UserLoanListPage from "@/pages/admin/UserLoanListPage";
 import { EmiDetails } from "@/pages/admin/EmiDetailsPage";
 import NotificationPage from "@/pages/admin/NotificationPage";
+import AdminChatPage from "@/pages/admin/AdminChatPage";
+import DashboardPage from "@/pages/admin/DashboardPage";
 
 const AdminPages: FC = () => {
   return (
@@ -28,16 +29,14 @@ const AdminPages: FC = () => {
         <Routes>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="users" element={<UserListPage />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<DashboardPage />} />
           <Route path="application" element={<ApplicationListPage />} />
           <Route
             path="capital-transaction"
             element={<CapitalAndTransactionsPage />}
           />
-          <Route
-            path="notification"
-            element={<NotificationPage />}
-          />
+          <Route path="notification" element={<NotificationPage />} />
+          <Route path="chat-support" element={<AdminChatPage />} />
           <Route
             path="User-verification"
             element={<UserVerificationListPage />}
