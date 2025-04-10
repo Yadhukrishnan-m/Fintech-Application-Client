@@ -66,6 +66,7 @@ export default function UserChatPage() {
         socket.disconnect()
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat]);
 
 

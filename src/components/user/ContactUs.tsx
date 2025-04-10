@@ -2,13 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -25,8 +18,109 @@ import {
   HelpCircle,
   ArrowRight,
 } from "lucide-react";
+import { z } from "zod";
+import { useState } from "react";
+import userAxiosInstance from "@/config/UserAxiosInstence";
+
+// Define the form schema with Zod
+const contactFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+// Type for our form values
+type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export default function ContactUs() {
+  // Form state
+  const [formValues, setFormValues] = useState<ContactFormValues>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  // Error state
+  const [errors, setErrors] = useState<Partial<ContactFormValues>>({});
+
+  // Form submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  // Handle input changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormValues((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+
+    // Clear the error for this field if it exists
+    if (errors[id as keyof ContactFormValues]) {
+      setErrors((prev) => ({
+        ...prev,
+        [id]: undefined,
+      }));
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const validatedData = contactFormSchema.parse(formValues);
+      setErrors({});
+      setIsSubmitting(true);
+
+    
+      await userAxiosInstance.post('/contact-us',validatedData)
+
+
+       
+
+      
+      setSubmitStatus({
+        type: "success",
+        message:
+          "Your message has been sent successfully! We'll get back to you soon.",
+      });
+      setFormValues({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      // Handle validation errors
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Partial<ContactFormValues> = {};
+        error.errors.forEach((err) => {
+          const field = err.path[0] as keyof ContactFormValues;
+          fieldErrors[field] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        // Handle API errors
+        setSubmitStatus({
+          type: "error",
+          message:
+            "There was a problem sending your message. Please try again.",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -211,33 +305,63 @@ export default function ContactUs() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form className="grid gap-5">
+                  {submitStatus.type && (
+                    <div
+                      className={`mb-4 p-3 rounded-md ${
+                        submitStatus.type === "success"
+                          ? "bg-green-50 text-green-800 border border-green-200"
+                          : "bg-red-50 text-red-800 border border-red-200"
+                      }`}
+                    >
+                      {submitStatus.message}
+                    </div>
+                  )}
+
+                  <form className="grid gap-5" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-2 gap-5">
                       <div className="space-y-2">
                         <label
-                          htmlFor="first-name"
+                          htmlFor="firstName"
                           className="text-sm font-medium"
                         >
                           First Name
                         </label>
                         <Input
-                          id="first-name"
+                          id="firstName"
                           placeholder="John"
-                          className="border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
+                          className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
+                            errors.firstName ? "border-red-300" : ""
+                          }`}
+                          value={formValues.firstName}
+                          onChange={handleChange}
                         />
+                        {errors.firstName && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.firstName}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label
-                          htmlFor="last-name"
+                          htmlFor="lastName"
                           className="text-sm font-medium"
                         >
                           Last Name
                         </label>
                         <Input
-                          id="last-name"
+                          id="lastName"
                           placeholder="Doe"
-                          className="border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
+                          className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
+                            errors.lastName ? "border-red-300" : ""
+                          }`}
+                          value={formValues.lastName}
+                          onChange={handleChange}
                         />
+                        {errors.lastName && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.lastName}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -249,8 +373,17 @@ export default function ContactUs() {
                         id="email"
                         type="email"
                         placeholder="john.doe@example.com"
-                        className="border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
+                        className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
+                          errors.email ? "border-red-300" : ""
+                        }`}
+                        value={formValues.email}
+                        onChange={handleChange}
                       />
+                      {errors.email && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -261,37 +394,17 @@ export default function ContactUs() {
                         id="phone"
                         type="tel"
                         placeholder="+1 (555) 123-4567"
-                        className="border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
+                        className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
+                          errors.phone ? "border-red-300" : ""
+                        }`}
+                        value={formValues.phone}
+                        onChange={handleChange}
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="inquiry-type"
-                        className="text-sm font-medium"
-                      >
-                        Inquiry Type
-                      </label>
-                      <Select>
-                        <SelectTrigger
-                          id="inquiry-type"
-                          className="border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
-                        >
-                          <SelectValue placeholder="Select an inquiry type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="personal-loan">
-                            Personal Loan
-                          </SelectItem>
-                          <SelectItem value="business-loan">
-                            Business Loan
-                          </SelectItem>
-                          <SelectItem value="agricultural-loan">
-                            Agricultural Loan
-                          </SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      {errors.phone && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.phone}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -301,15 +414,27 @@ export default function ContactUs() {
                       <Textarea
                         id="message"
                         placeholder="Please provide details about your inquiry..."
-                        className="min-h-[120px] border-[#e9f5ee] focus-visible:ring-[#2d6a4f]"
+                        className={`min-h-[120px] border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
+                          errors.message ? "border-red-300" : ""
+                        }`}
+                        value={formValues.message}
+                        onChange={handleChange}
                       />
+                      {errors.message && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.message}
+                        </p>
+                      )}
                     </div>
 
                     <Button
                       type="submit"
                       className="w-full bg-gradient-to-r from-[#2d6a4f] to-[#52b788] hover:from-[#1b4332] hover:to-[#40916c] group"
+                      disabled={isSubmitting}
                     >
-                      <span>Submit Inquiry</span>
+                      <span>
+                        {isSubmitting ? "Submitting..." : "Submit Inquiry"}
+                      </span>
                       <Send className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                     </Button>
                   </form>
@@ -380,44 +505,8 @@ export default function ContactUs() {
               </Card>
             ))}
           </div>
-
-          <div className="flex justify-center mt-12">
-            <Button
-              variant="outline"
-              className="border-[#2d6a4f] text-[#2d6a4f] hover:bg-[#e9f5ee] group"
-            >
-              <span>View All FAQs</span>
-              <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      {/* <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-r from-[#2d6a4f] to-[#52b788] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-        <div className="container px-4 md:px-6 mx-auto relative z-10">
-          <div className="flex flex-col items-center text-center space-y-6 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
-              Ready to Start Your Financial Journey?
-            </h2>
-            <p className="text-[#e9f5ee] md:text-xl/relaxed max-w-[800px]">
-              Our team of experts is ready to help you achieve your financial
-              goals with personalized solutions tailored to your needs.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <button className="px-8 py-3 rounded-full bg-white text-[#2d6a4f] font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-100 group">
-                <span>Apply for a Loan</span>
-                <ArrowRight className="inline-block h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-              <button className="px-8 py-3 rounded-full bg-transparent text-white font-medium border border-white hover:bg-white/10 transition-all duration-300">
-                Contact Us
-              </button>
-            </div>
-          </div>
-        </div>
-      </section> */}
     </main>
   );
 }
