@@ -13,6 +13,7 @@ import ChangePassword from "@/components/user/profile/ChangePassword";
 import EmiListPage from "@/pages/user/EmiListPage";
 import TransactionPage from "@/pages/user/TransactionPage";
 import UserChatPage from "@/pages/user/UserChatPage";
+import NotFound from "@/components/shared/NotFound";
 // import LoanListingPage from "@/pages/user/LoanListingPage";
 export default function ProfileAndDashboard() {
   return (
@@ -40,6 +41,8 @@ export default function ProfileAndDashboard() {
 
             <Route path="/loan/:id" element={<EmiListPage />} />
             <Route path="/transactions" element={<TransactionPage />} />
+                          <Route path="*" element={<NotFound role={'user'}/>} />
+            
             {/* <Route
               path="/loan/:id"
               element={<EmiListPage />}

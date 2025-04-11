@@ -18,6 +18,7 @@ import { EmiDetails } from "@/pages/admin/EmiDetailsPage";
 import NotificationPage from "@/pages/admin/NotificationPage";
 import AdminChatPage from "@/pages/admin/AdminChatPage";
 import DashboardPage from "@/pages/admin/DashboardPage";
+import NotFound from "@/components/shared/NotFound";
 
 const AdminPages: FC = () => {
   return (
@@ -54,6 +55,8 @@ const AdminPages: FC = () => {
           <Route path="/user-loan/:userLoanId" element={<EmiDetails />} />
           <Route path="/application/:id" element={<ApplicationDetailsPage />} />
           <Route path="userloan" element={<UserLoanListPage />} />
+                        <Route path="*" element={<NotFound role={'admin'}/>} />
+          
         </Routes>
       </div>
     </div>

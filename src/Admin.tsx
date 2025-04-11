@@ -4,6 +4,7 @@ import Login from "./pages/admin/LoginPage";
 import IsAdminLogout from "./protected/IsAdminLogout";
 import AdminPages from "./layouts/AdminLayout";
 import IsAdminLogin from "./protected/IsAdminLogin";
+import NotFound from "./components/shared/NotFound";
 
 function Admin() {
   return (
@@ -26,7 +27,8 @@ function Admin() {
             </IsAdminLogin>
           }
         ></Route>
-        <Route path="*" element={<h1>not found</h1>} />
+              <Route path="*" element={<NotFound role={'admin'}/>} />
+      
       </Routes>
     </>
   );

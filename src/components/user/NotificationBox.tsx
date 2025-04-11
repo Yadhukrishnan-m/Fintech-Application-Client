@@ -38,7 +38,10 @@ export default function Notifications() {
 
   useEffect(() => {
     fetchNotification();
-  }, [fetchNotification]);
+      return () => {
+        makeasReaded(); // This will be called when the component unmounts
+      };
+  }, [fetchNotification,makeasReaded]);
 
   useEffect(() => {
     if (!userId) return;

@@ -13,6 +13,7 @@ import LoanApplicationPage from "./pages/user/LoanApplicationPage";
 import NotificationPage from "./pages/user/NotificationPage";
 import ContactUsPage from "./pages/user/ContactUsPage";
 import AboutUsPage from "./pages/user/AboutUsPage";
+import NotFound from "./components/shared/NotFound";
 function User() {
   return (
     <>
@@ -58,7 +59,7 @@ function User() {
         <Route path="/contact-us" element={<ContactUsPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
 
-        <Route path="*" element={<h1>not found</h1>} />
+        <Route path="*" element={<NotFound role={'user'}/>} />
       </Routes>
     </>
   );
