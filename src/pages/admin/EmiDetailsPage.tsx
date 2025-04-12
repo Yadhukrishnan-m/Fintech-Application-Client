@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import {
   Card,
@@ -10,36 +8,36 @@ import {
 } from "@/components/ui/card";
 import { EmiCards } from "@/components/admin/userLoanDetails/EmiCards";
 import { EmiTable } from "@/components/admin/userLoanDetails/EmiTable";
-import { EmiStatusChart } from "@/components/admin/userLoanDetails/UserLoanChart"; 
+import { EmiStatusChart } from "@/components/admin/userLoanDetails/UserLoanChart";
 
-import { IEMI, IUserLoan,  } from "@/interfaces/interfaces";
+import { IEMI, IUserLoan } from "@/interfaces/interfaces";
 import { useParams } from "react-router-dom";
 import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
-export function EmiDetails() {
+function EmiDetails() {
   const [emiData, setEmiData] = useState<IEMI[]>();
   const [loanDetails, setLoanDetails] = useState<IUserLoan>();
-const {userLoanId}=useParams()
-    useEffect(() => {
-      async function fetchLoanData() {
-        try {
-          const response = await adminAxiosInstance.get(
-            `/user-loan/emis/${userLoanId}`
-          );
-          setEmiData(response.data.emi);
-          setLoanDetails(response.data.userLoan);
-        } catch (error) {
-          console.error("Error fetching loan data:", error);
-        }
+  const { userLoanId } = useParams();
+  useEffect(() => {
+    async function fetchLoanData() {
+      try {
+        const response = await adminAxiosInstance.get(
+          `/user-loan/emis/${userLoanId}`
+        );
+        setEmiData(response.data.emi);
+        setLoanDetails(response.data.userLoan);
+      } catch (error) {
+        console.error("Error fetching loan data:", error);
       }
-
-      fetchLoanData();
-    }, [userLoanId]); 
-
-    if (!emiData || !loanDetails) {
-        return 
     }
+
+    fetchLoanData();
+  }, [userLoanId]);
+
+  if (!emiData || !loanDetails) {
+    return;
+  }
 
   // Calculate summary statistics
   const totalEmis = emiData.length;
@@ -51,14 +49,20 @@ const {userLoanId}=useParams()
   const dueEmis = emiData.filter((emi) => emi.status === "due").length;
   const graceEmis = emiData.filter((emi) => emi.status === "grace").length;
 
-  const totalAmount = emiData.reduce((sum, emi) => sum + emi.amount +emi.penalty, 0);
+  const totalAmount = emiData.reduce(
+    (sum, emi) => sum + emi.amount + emi.penalty,
+    0
+  );
   const totalPenalty = emiData.reduce((sum, emi) => sum + emi.penalty, 0);
- const paidpenalty = emiData
-   .filter((emi) => emi.transaction)
-   .reduce((sum, emi) => sum + (emi.transaction?.penaltyAmount || 0) , 0);
+  const paidpenalty = emiData
+    .filter((emi) => emi.transaction)
+    .reduce((sum, emi) => sum + (emi.transaction?.penaltyAmount || 0), 0);
   const totalPaid = emiData
     .filter((emi) => emi.transaction)
-    .reduce((sum, emi) => sum + (emi.transaction?.amount || 0) +emi.penalty, 0);
+    .reduce(
+      (sum, emi) => sum + (emi.transaction?.amount || 0) + emi.penalty,
+      0
+    );
 
   return (
     <div className=" bg-gray-100 ">
@@ -184,5 +188,4 @@ const {userLoanId}=useParams()
   );
 }
 
-
- 
+export default EmiDetails

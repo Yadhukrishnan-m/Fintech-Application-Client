@@ -1,24 +1,33 @@
-import HomePage from "./pages/user/HomePage";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Register from "./pages/user/Register";
-import LoginForm from "./pages/user/login";
 import IsLogin from "./protected/IsLogin";
 import IsLogout from "./protected/IsLogout";
-import ForgotPasswordEmailPage from "./pages/user/ForgotPasswordEmailPage";
-import ResetPasswordPage from "./pages/user/ResetPasswordPage";
-import ProfileAndDashboard from "./layouts/Profile&Dashboard";
-import LoanListingPage from "./pages/user/LoanListingPage";
-import LoanDetailsPage from "./pages/user/LoanDetailsPage";
-import LoanApplicationPage from "./pages/user/LoanApplicationPage";
-import NotificationPage from "./pages/user/NotificationPage";
-import ContactUsPage from "./pages/user/ContactUsPage";
-import AboutUsPage from "./pages/user/AboutUsPage";
-import NotFound from "./components/shared/NotFound";
+import Loader from "./components/shared/Loader";
+
+// Lazy load all page components
+const HomePage = lazy(() => import("./pages/user/HomePage"));
+const Register = lazy(() => import("./pages/user/Register"));
+const LoginForm = lazy(() => import("./pages/user/login"));
+const ForgotPasswordEmailPage = lazy(
+  () => import("./pages/user/ForgotPasswordEmailPage")
+);
+const ResetPasswordPage = lazy(() => import("./pages/user/ResetPasswordPage"));
+const ProfileAndDashboard = lazy(() => import("./layouts/Profile&Dashboard"));
+const LoanListingPage = lazy(() => import("./pages/user/LoanListingPage"));
+const LoanDetailsPage = lazy(() => import("./pages/user/LoanDetailsPage"));
+const LoanApplicationPage = lazy(
+  () => import("./pages/user/LoanApplicationPage")
+);
+const NotificationPage = lazy(() => import("./pages/user/NotificationPage"));
+const ContactUsPage = lazy(() => import("./pages/user/ContactUsPage"));
+const AboutUsPage = lazy(() => import("./pages/user/AboutUsPage"));
+const NotFound = lazy(() => import("./components/shared/NotFound"));
+
 function User() {
   return (
-    <>
+    <Suspense fallback={<Loader message={'loading...'} />}>
       <Routes>
-        <Route index element={<HomePage />}></Route>
+        <Route index element={<HomePage />} />
 
         <Route
           path="/register"
@@ -27,7 +36,8 @@ function User() {
               <Register />
             </IsLogout>
           }
-        ></Route>
+        />
+
         <Route
           path="/login"
           element={
@@ -35,15 +45,12 @@ function User() {
               <LoginForm />
             </IsLogout>
           }
-        ></Route>
-        <Route
-          path="/forgot-password"
-          element={<ForgotPasswordEmailPage />}
-        ></Route>
-        <Route
-          path="/reset-password/:token"
-          element={<ResetPasswordPage />}
-        ></Route>
+        />
+
+        <Route path="/forgot-password" element={<ForgotPasswordEmailPage />} />
+
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
         <Route
           path="/dashboard/*"
           element={
@@ -51,7 +58,8 @@ function User() {
               <ProfileAndDashboard />
             </IsLogin>
           }
-        ></Route>
+        />
+
         <Route path="/loans" element={<LoanListingPage />} />
         <Route path="/notifications" element={<NotificationPage />} />
         <Route path="/loan/:id" element={<LoanDetailsPage />} />
@@ -59,9 +67,9 @@ function User() {
         <Route path="/contact-us" element={<ContactUsPage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
 
-        <Route path="*" element={<NotFound role={'user'}/>} />
+        <Route path="*" element={<NotFound role={"user"} />} />
       </Routes>
-    </>
+    </Suspense>
   );
 }
 
