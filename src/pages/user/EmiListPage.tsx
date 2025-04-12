@@ -11,6 +11,7 @@ import Loader from "@/components/shared/Loader";
 // import { ErrorToast } from "@/components/shared/Toast";
 import { IEMI, IUserLoan } from "@/interfaces/interfaces";
 import { initiateRazorpayPayment } from "@/utils/razorpayHelper";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 
 const defaultUserLoan: IUserLoan = {
   userId: "",
@@ -91,6 +92,12 @@ console.log(emis);
 
   return (
     <div className="container mx-auto py-8 px-4 bg-gradient-to-b from-teal-50 to-white min-h-screen">
+      <Breadcrumb
+        paths={[
+          { name: "Your loans", link: "/dashboard/loans" },
+          { name: "Loan Detail" },
+        ]}
+      />
       <h1 className="text-3xl font-bold text-teal-800 mb-2">Loan Repayment</h1>
       <p className="text-teal-600 "> userLoanId : {userLoan.userLoanId}</p>
       <p className="text-teal-600 mb-8">Track and manage your EMI payments</p>

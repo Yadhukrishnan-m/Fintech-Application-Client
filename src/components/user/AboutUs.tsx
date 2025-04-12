@@ -66,6 +66,7 @@ export default function AboutUs() {
                   fill
                   className="object-cover"
                 /> */}
+                <img src="/HomeImages/Banner.avif" alt="" />
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#e9f5ee] rounded-2xl z-[-1]"></div>
             </div>
@@ -302,7 +303,6 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

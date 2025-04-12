@@ -227,7 +227,7 @@ export default function ContactUs() {
                   <CardContent>
                     <p className="text-sm text-gray-500">General Inquiries</p>
                     <p className="font-medium text-[#2d6a4f]">
-                      info@yourcompany.com
+                      info@quicfin.com
                     </p>
                   </CardContent>
                 </Card>
@@ -328,7 +328,7 @@ export default function ContactUs() {
                         </label>
                         <Input
                           id="firstName"
-                          placeholder="John"
+                          placeholder="name"
                           className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
                             errors.firstName ? "border-red-300" : ""
                           }`}
@@ -350,7 +350,7 @@ export default function ContactUs() {
                         </label>
                         <Input
                           id="lastName"
-                          placeholder="Doe"
+                          placeholder="name"
                           className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
                             errors.lastName ? "border-red-300" : ""
                           }`}
@@ -372,7 +372,7 @@ export default function ContactUs() {
                       <Input
                         id="email"
                         type="email"
-                        placeholder="john.doe@example.com"
+                        placeholder="email@example.com"
                         className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
                           errors.email ? "border-red-300" : ""
                         }`}
@@ -393,7 +393,7 @@ export default function ContactUs() {
                       <Input
                         id="phone"
                         type="tel"
-                        placeholder="+1 (555) 123-4567"
+                        placeholder="+91 "
                         className={`border-[#e9f5ee] focus-visible:ring-[#2d6a4f] ${
                           errors.phone ? "border-red-300" : ""
                         }`}
