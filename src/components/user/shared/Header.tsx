@@ -26,8 +26,6 @@ export default function Header() {
 
     }
    }, [totalUnreaded,userId]);
-
-
   return (
     <header className="w-full py-4 bg-white border-b">
       <div className="container mx-auto px-4 flex items-center justify-between">

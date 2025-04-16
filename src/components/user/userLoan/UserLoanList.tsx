@@ -52,12 +52,12 @@ export default function UserLoanListCard({
       </div>
 
       <div className="mt-4 flex flex-col sm:flex-row justify-between items-center">
-        <div className="text-sm text-center sm:text-left">
+        {/* <div className="text-sm text-center sm:text-left">
           <p className="text-teal-200 font-medium">Next Due Date:</p>
           <p className="font-semibold">
             {new Date(loan.nextDueDate).toLocaleDateString()}
           </p>
-        </div>
+        </div> */}
 
         {/* Action Button */}
         <button
