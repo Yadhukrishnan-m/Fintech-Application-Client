@@ -8,7 +8,7 @@ import userAxiosInstance from "@/config/UserAxiosInstence";
 import Header from "@/components/user/shared/Header";
 import Footer from "@/components/user/shared/Footer";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import store from "@/redux/store";
+
 
 export default function LoanDetailsPage() {
   const { id } = useParams();
@@ -16,7 +16,7 @@ export default function LoanDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [interest, setInterest]=useState('')
-  const userId = store.getState().userTokenSlice.userToken;
+
 
   useEffect(() => {
     const fetchLoanData = async () => {
@@ -62,12 +62,12 @@ export default function LoanDetailsPage() {
     if (id) {
 
       fetchLoanData();
-      if (userId) {
+      
          getInterest();
-      }
+      
      
     }
-  }, [id,userId]);
+  }, [id]);
 
   if (loading) {
     return (

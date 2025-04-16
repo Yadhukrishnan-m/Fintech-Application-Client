@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import userAxiosInstance from "@/config/UserAxiosInstence";
+import store from "@/redux/store";
 import { CalendarDays, Check, Clock, DollarSign, Loader2, Percent } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +33,8 @@ interface LoanDetailsProps {
 export default function LoanDetails({ loan ,interest}: LoanDetailsProps) {
   const [isBlacklisted, setIsBlacklisted] = useState(false);
   const [user,setuser]=useState('')
+    const userId = store.getState().userTokenSlice.userToken;
+
 const [isloading,setisloading]=useState(false)
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,9 +52,12 @@ const [isloading,setisloading]=useState(false)
         console.error("Error fetching user data:", error);
       }
     };
-
+    if (userId) {
     fetchUserData();
-  }, []);
+      
+    }
+
+  }, [userId]);
 
     
     const navigate=useNavigate()
