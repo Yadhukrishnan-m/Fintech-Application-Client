@@ -21,8 +21,11 @@ export default function Header() {
    }, []);
 
    useEffect(() => {
-     totalUnreaded();
-   }, [totalUnreaded]);
+    if (userId) {
+           totalUnreaded();
+
+    }
+   }, [totalUnreaded,userId]);
 
 
   return (
@@ -56,17 +59,19 @@ export default function Header() {
 
         <div className="flex items-center space-x-4">
           {/* Desktop View: Bell Icon */}
-          <button
-            onClick={() => navigate("/notifications")}
-            className="relative text-gray-800 hover:text-teal-600 font-medium hidden md:flex items-center"
-          >
-            <BellIcon className="w-6 h-6" />
-            {totalUnreadedcount > 0 && (
-              <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {totalUnreadedcount}
-              </span>
-            )}
-          </button>
+          {userId && (
+            <button
+              onClick={() => navigate("/notifications")}
+              className="relative text-gray-800 hover:text-teal-600 font-medium hidden md:flex items-center"
+            >
+              <BellIcon className="w-6 h-6" />
+              {totalUnreadedcount > 0 && (
+                <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {totalUnreadedcount}
+                </span>
+              )}
+            </button>
+          )}
 
           {userId ? (
             <button
