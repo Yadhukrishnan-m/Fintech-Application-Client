@@ -57,7 +57,7 @@ userAxiosInstance.interceptors.response.use(
       try {
         console.log(" Refreshing Token...");
         const refreshResponse = await axios.post<{ accessToken: string }>(
-          "http://localhost:3000/refresh-token",
+          `${import.meta.env.VITE_SERVER_BASEURL}/refresh-token`,
           {},
           { withCredentials: true }
         );
