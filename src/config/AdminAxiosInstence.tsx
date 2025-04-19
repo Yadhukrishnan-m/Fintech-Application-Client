@@ -55,7 +55,7 @@ adminAxiosInstance.interceptors.response.use(
       try {
         console.log(" Refreshing Token...");
         const refreshResponse = await axios.post<{ accessToken: string }>(
-          import.meta.env.VITE_SERVER_BASEURL+"/refresh-token",
+          import.meta.env.VITE_SERVER_BASEURL+"/admin/refresh-token",
           {},
           { withCredentials: true }
         );
