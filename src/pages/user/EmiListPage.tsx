@@ -12,6 +12,8 @@ import Loader from "@/components/shared/Loader";
 import { IEMI, IUserLoan } from "@/interfaces/interfaces";
 import { initiateRazorpayPayment } from "@/utils/razorpayHelper";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { ErrorToast } from "@/components/shared/Toast";
+import { AxiosError } from "axios";
 
 const defaultUserLoan: IUserLoan = {
   userId: "",
@@ -73,8 +75,15 @@ console.log(emis);
              await initiateRazorpayPayment(orderId, totalAmount, id!);
       }
       fetchApplications();
-    } catch (error) {
-      console.log(error);
+    } catch (error:unknown) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message ?? "Something went wrong";
+        ErrorToast(errorMessage);
+        console.log(error);
+        
+      }
+      
     } 
   }
 

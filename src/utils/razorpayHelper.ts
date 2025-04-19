@@ -94,7 +94,19 @@ export const initiateRazorpayPayment = async (
         }
       },
       modal: {
-        ondismiss: () => {
+        ondismiss: async () => {
+          try {
+        
+            await userAxiosInstance.post("/razorpay/payment/cancel", {
+              userLoanId,
+            });
+          } catch (error) {
+            console.error(
+              "Error notifying server about payment cancellation:",
+              error
+            );
+          }
+
           ErrorToast("Payment process was cancelled.");
           reject(new Error("Payment process cancelled by user."));
         },
