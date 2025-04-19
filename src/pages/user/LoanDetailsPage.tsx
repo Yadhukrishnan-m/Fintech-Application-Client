@@ -42,7 +42,6 @@ export default function LoanDetailsPage() {
      const getInterest = async () => {
        try {
          const response = await userAxiosInstance.get(`/get-interest/${id}`, );
-         console.log(response);
          if (response.data.success) {
            setInterest(response.data.interest);
          } else if (response.data.message === "user not verified") {

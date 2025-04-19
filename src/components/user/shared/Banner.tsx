@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 
 function Banner() {
+  const navigate=useNavigate()
   return (
     <section className="bg-white py-12 md:py-20">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
@@ -16,12 +18,12 @@ function Banner() {
             or manage personal expenses, we provide quick approvals and a
             transparent process to make borrowing simple and stress-free.
           </p>
-          <a
-            href="/get-started"
+          <button
+            onClick={() => navigate("/loans")}
             className="inline-flex bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-md font-medium"
           >
             Get Started
-          </a>
+          </button>
         </div>
         <div className="md:w-1/2 flex justify-center">
           <img
