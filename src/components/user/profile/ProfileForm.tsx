@@ -84,6 +84,7 @@ export default function CustomerForm() {
     pan: null,
     cibil: null,
   });
+const [loading, setLoading] = useState(false);
 
 
 
@@ -137,6 +138,8 @@ export default function CustomerForm() {
   };
 
   const onSubmit = async (data: CustomerFormData) => {
+    setLoading(true); // Start loading
+
     // Validate files before submitting
     const aadhaarValid = validateImageFile(aadhaarFile);
     const panValid = validateImageFile(panFile);
@@ -176,10 +179,16 @@ export default function CustomerForm() {
         );
         SuccessToast("successfully updated");
         if (response.data.success) {
-          navigate("/dashboard/profile", { state: { updated: location?.state ? location.state?.from : 'pending' } });
+          navigate("/dashboard/profile", {
+            state: {
+              updated: location?.state ? location.state?.from : "pending",
+            },
+          });
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        setLoading(false); // Start loading
       }
 
       console.log("Form Data:", formData);
@@ -259,7 +268,7 @@ export default function CustomerForm() {
     <Card className="w-full mx-auto shadow-lg">
       <CardHeader className="bg-teal-50 border-b border-teal-100">
         <CardTitle className="text-2xl font-bold text-teal-700 text-center">
-        Complete Your  Details 
+          Complete Your Details
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
@@ -438,9 +447,36 @@ export default function CustomerForm() {
 
             <Button
               type="submit"
+              disabled={loading}
               className="w-full bg-teal-600 hover:bg-teal-700 text-white"
             >
-              Submit
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Uploading...
+                </div>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </form>
         </Form>
