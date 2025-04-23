@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { useState } from "react";
-import { publicServices } from "../../api/user/publicServices";
+import { publicServices } from "@/api/user/PublicService";
 
 // Define the form schema with Zod
 const contactFormSchema = z.object({

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {  IUserLoanPopulated } from "@/interfaces/interfaces";
 import UserLoanListCard from "@/components/user/userLoan/UserLoanList";
-import { userLoanService } from "@/api/user/userLoanService";
+import { userLoanService } from "@/api/user/UserLoanServices";
 
 const UserLoanListPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);

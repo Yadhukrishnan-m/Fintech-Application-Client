@@ -1,4 +1,4 @@
-import { applicationService } from "@/api/user/applicationService";
+import { applicationService } from "@/api/user/ApplicationServices";
 import Loader from "@/components/shared/Loader";
 import Pagination from "@/components/shared/Pagination";
 import ApplicationListCard from "@/components/user/application/ApplicationListCard";

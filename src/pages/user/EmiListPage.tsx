@@ -13,7 +13,7 @@ import { initiateRazorpayPayment } from "@/utils/razorpayHelper";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { ErrorToast } from "@/components/shared/Toast";
 import { AxiosError } from "axios";
-import { userLoanService } from "@/api/user/userLoanService";
+import { userLoanService } from "@/api/user/UserLoanServices";
 import { paymentService } from "@/api/user/paymentService";
 
 const defaultUserLoan: IUserLoan = {

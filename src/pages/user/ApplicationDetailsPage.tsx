@@ -4,7 +4,7 @@ import { ILoanApplication } from "@/interfaces/interfaces";
 import { useParams } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { applicationService } from "@/api/user/applicationService";
+import { applicationService } from "@/api/user/ApplicationServices";
 
 const ApplicationDetailsPage = () => {
 const [applicationData, setApplicationData] = useState<ILoanApplication | null>(

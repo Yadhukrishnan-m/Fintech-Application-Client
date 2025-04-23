@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import store from "@/redux/store";
 import { BellIcon } from "lucide-react";
-import { notificationServices } from "@/api/user/notificationService";
+import { notificationServices } from "@/api/user/NotificationServices";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);

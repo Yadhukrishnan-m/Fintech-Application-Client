@@ -10,7 +10,7 @@ import debounce from "lodash.debounce";
 import TransactionCard from "@/components/shared/TransactionCard"; // Import the new component
 import { ITransaction } from "@/interfaces/interfaces";
 import Pagination from "@/components/shared/Pagination";
-import { transactionService } from "@/api/user/transactionService";
+import { transactionService } from "@/api/user/TransactionServices";
 
 
 

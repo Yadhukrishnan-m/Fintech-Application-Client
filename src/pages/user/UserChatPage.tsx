@@ -5,7 +5,7 @@ import { ChatContainer } from "@/components/shared/chat/ChatContainer";
 // import { ArrowLeft } from "lucide-react";
 import { IChat, IMessage, IUser } from "@/interfaces/interfaces";
 import socket from "@/config/socket";
-import { chatServices } from "@/api/user/chatService";
+import { chatServices } from "@/api/user/ChatServices";
 // import socket, { registerChat } from "@/config/socket";
 
 export default function UserChatPage() {

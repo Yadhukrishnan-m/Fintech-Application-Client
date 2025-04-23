@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { Bell } from "lucide-react";
 import socket, { registerUser } from "@/config/socket";
-import { notificationServices } from "@/api/user/notificationService";
+import { notificationServices } from "@/api/user/NotificationServices";
 
 // Simplified notification interface
 interface Notification {

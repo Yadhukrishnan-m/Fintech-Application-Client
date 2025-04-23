@@ -34,7 +34,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
 import { AxiosError } from "axios";
 import { loanServices } from "@/api/user/LoanService";
-import { applicationService } from "@/api/user/applicationService";
+import { applicationService } from "@/api/user/ApplicationServices";
 // import { ErrorToast } from "@/components/shared/Toast";
 
 // Loan Data Type
