@@ -22,11 +22,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OtpModal from "@/components/user/OtpModal";
-//axios
-import userAxiosInstance from "../../config/UserAxiosInstence";
 import {  SuccessToast } from "@/components/shared/Toast";
 import Header from "@/components/user/shared/Header";
 import Footer from "@/components/user/shared/Footer";
+import { authService } from "@/api/AuthService";
 
 // Validation schema
 const formSchema = z
@@ -81,9 +80,7 @@ export default function Register() {
     setIsLoading(true);
     try {
       setStoredFormValues(values);
-      const otpResponse = await userAxiosInstance.post("/generate-otp", {
-        email: values.email,
-      });
+     const otpResponse = await authService.generateOtp(values.email);
       console.log("✅ OTP generated successfully:", otpResponse.data);
       setIsOtpModalOpen(true);
       console.log("Form submitted:", values);
@@ -95,7 +92,7 @@ export default function Register() {
   };
 
   const onFinalSubmit = async () => {
-    await userAxiosInstance.post("/register", storedFormValues);
+   await authService.register(storedFormValues as FormValues);
      SuccessToast("successfully registered now login!!");
        navigate("/login");
     try {

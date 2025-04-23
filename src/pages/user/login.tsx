@@ -4,7 +4,7 @@ import Footer from '../../components/user/shared/Footer'
 import Header from '@/components/user/shared/Header'
 import { useDispatch } from 'react-redux';
 import { addUserToken } from '@/redux/slice/UserTokenSlice';
-import userAxiosInstance from '@/config/UserAxiosInstence';
+import { authService } from '@/api/AuthService';
 
 function Login() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ function Login() {
     email: string;
     password: string;
   }) => {
-    const response = await userAxiosInstance.post("/login", values);
+  const response = await authService.login(values);
     console.log('working....');
     console.log(response.data.success);
     
