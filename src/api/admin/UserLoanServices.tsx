@@ -1,4 +1,4 @@
-import adminAxiosInstance from "@/config/UserAxiosInstence";
+import adminAxiosInstance from "@/config/AdminAxiosInstence";
 
 export const userLoanService = {
   getUserLoanEmis: async (userLoanId: string) => {

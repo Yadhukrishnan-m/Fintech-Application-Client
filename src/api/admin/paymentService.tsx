@@ -1,4 +1,4 @@
-import userAxiosInstance from "@/config/UserAxiosInstence";
+import userAxiosInstance from "@/config/AdminAxiosInstence";
 
 
 export const paymentService = {
