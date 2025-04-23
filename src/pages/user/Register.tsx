@@ -202,6 +202,7 @@ export default function Register() {
                     </FormItem>
                   )}
                 />
+                <GoogleLoginComponent />
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
@@ -212,7 +213,6 @@ export default function Register() {
                 </Button>
               </form>
             </Form>
-            <GoogleLoginComponent />
           </CardContent>
           <CardFooter className="flex justify-center pt-4">
             <p className="text-sm">
