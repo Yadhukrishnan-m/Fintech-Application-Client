@@ -12,9 +12,9 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import userAxiosInstance from "../../config/UserAxiosInstence";
 import { AxiosError } from "axios";
 import { ErrorToast } from "../shared/Toast";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 type OtpModalProps = {
   isOpen: boolean;
@@ -86,10 +86,8 @@ export default function OtpModal({
     }
     setLoading(true);
     try {
-      const response = await userAxiosInstance.post("/verify-otp", {
-        otp,
-        email,
-      });
+           const response = await authService.verifyOtp(otp, email);
+
       if (response.data.success) {
         onFinalSubmit();
       }
@@ -112,7 +110,8 @@ export default function OtpModal({
   const resendOtp = async () => {
     // setLoading(true);
     try {
-      await userAxiosInstance.post("/generate-otp", { email });
+         await authService.generateOtp(email);
+
       // Start the timer again
       startTimer();
     } catch (error) {

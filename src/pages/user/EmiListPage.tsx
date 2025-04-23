@@ -5,7 +5,6 @@ import EMITimeline from "../../components/user/userLoan/EmiCards";
 // import { toast } from "@/components/ui/use-toast";
 // import { ToastAction } from "@/components/ui/toast";
 import { Card } from "@/components/ui/card";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import {  useParams } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 // import { ErrorToast } from "@/components/shared/Toast";
@@ -14,6 +13,8 @@ import { initiateRazorpayPayment } from "@/utils/razorpayHelper";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { ErrorToast } from "@/components/shared/Toast";
 import { AxiosError } from "axios";
+import { userLoanService } from "@/api/user/userLoanService";
+import { paymentService } from "@/api/user/paymentService";
 
 const defaultUserLoan: IUserLoan = {
   userId: "",
@@ -40,11 +41,12 @@ const { id } = useParams();
 const [loading, setLoading] = useState(false);
 
 const fetchApplications = useCallback(async () => {
+  if (!id) {
+    return 
+  }
   setLoading(true);
   try {
-    const response = await userAxiosInstance.get(
-      `/user-loan/emis/${id}`
-    );
+   const response = await userLoanService.getUserLoanEmis(id);
  console.log(response.data.emi);
  
 
@@ -64,10 +66,12 @@ console.log(emis);
 
 
   const handlePayEMI = async() => {
+    if (!id) {
+      return
+    }
     try {
-      const response = await userAxiosInstance.get(
-        `/razorpay/create-order/${id}`
-      );
+          const response = await paymentService.createOrder(id);
+
       console.log(response.data);
       
       if (response.data.success) {

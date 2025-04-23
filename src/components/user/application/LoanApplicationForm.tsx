@@ -31,9 +31,10 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
 import { AxiosError } from "axios";
+import { loanServices } from "@/api/user/LoanService";
+import { applicationService } from "@/api/user/applicationService";
 // import { ErrorToast } from "@/components/shared/Toast";
 
 // Loan Data Type
@@ -139,8 +140,9 @@ export default function LoanApplicationForm() {
           throw new Error("Loan ID is required");
         }
 
-        const response = await userAxiosInstance.get(`/loan/${id}`);
-        if (response.data.success) {
+
+    const response = await loanServices.getLoanById(id);
+            if (response.data.success) {
           setLoanData(response.data.loan);
           setDataLoaded(true);
         } else {
@@ -210,11 +212,7 @@ export default function LoanApplicationForm() {
         }
       });
 
-      const response = await userAxiosInstance.post("/apply-loan", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+          const response = await applicationService.applyForLoan(formData);
       setIsSubmitting(false);
       if (response.data.success) {
         SuccessToast("successfully applied for loan");

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { useState } from "react";
-import userAxiosInstance from "@/config/UserAxiosInstence";
+import { publicServices } from "../../api/user/publicServices";
 
 // Define the form schema with Zod
 const contactFormSchema = z.object({
@@ -80,13 +80,8 @@ export default function ContactUs() {
       setErrors({});
       setIsSubmitting(true);
 
-    
-      await userAxiosInstance.post('/contact-us',validatedData)
+      await publicServices.sendContactForm(validatedData);
 
-
-       
-
-      
       setSubmitStatus({
         type: "success",
         message:

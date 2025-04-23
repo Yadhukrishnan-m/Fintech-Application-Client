@@ -1,7 +1,7 @@
+import { applicationService } from "@/api/user/applicationService";
 import Loader from "@/components/shared/Loader";
 import Pagination from "@/components/shared/Pagination";
 import ApplicationListCard from "@/components/user/application/ApplicationListCard";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -28,11 +28,7 @@ const ApplicationListPage = () => {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await userAxiosInstance.get("/applications", {
-        params: {
-          page: currentPage,
-        },
-      });
+      const response = await applicationService.getApplications( currentPage );
 
       setApplications(response.data.applications.applications);
       setTotalPages(response.data.applications.totalPages || 1);

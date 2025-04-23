@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SuccessToast } from "@/components/shared/Toast";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 const customerSchema = z.object({
   phone: z
@@ -168,15 +168,7 @@ const [loading, setLoading] = useState(false);
       if (cibilFile) formData.append("cibilDoc", cibilFile);
 
       try {
-        const response = await userAxiosInstance.post(
-          "/complete-profile",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await authService.completeProfile(formData);
         SuccessToast("successfully updated");
         if (response.data.success) {
           navigate("/dashboard/profile", {

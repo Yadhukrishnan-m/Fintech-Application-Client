@@ -1,5 +1,5 @@
+import { paymentService } from "@/api/user/paymentService";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 
 interface RazorpaySuccessResponse {
   razorpay_payment_id: string;
@@ -77,12 +77,12 @@ export const initiateRazorpayPayment = async (
       theme: { color: "#3399cc" },
       handler: async (response: RazorpaySuccessResponse) => {
         try {
-          await userAxiosInstance.post("/razorpay/verify-payment", {
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature,
-            userLoanId,
-          });
+            await paymentService.verifyPayment(
+              response.razorpay_payment_id,
+              response.razorpay_order_id,
+              response.razorpay_signature,
+              userLoanId
+            );
           SuccessToast("Payment Successful!");
           resolve();
         } catch (error) {
@@ -97,9 +97,8 @@ export const initiateRazorpayPayment = async (
         ondismiss: async () => {
           try {
         
-            await userAxiosInstance.post("/razorpay/payment/cancel", {
-              userLoanId,
-            });
+                     await paymentService.cancelPayment(userLoanId);
+
           } catch (error) {
             console.error(
               "Error notifying server about payment cancellation:",
@@ -119,12 +118,12 @@ export const initiateRazorpayPayment = async (
       "payment.failed",
       async (response: RazorpayFailureResponse) => {
         try {
-          await userAxiosInstance.post("/razorpay/verify-payment", {
-            razorpay_payment_id: response.error.metadata.payment_id || null,
-            razorpay_order_id: response.error.metadata.order_id || orderId,
-            razorpay_signature: null,
-            userLoanId,
-          });
+          await paymentService.verifyPayment(
+            null, // No payment ID on failure
+            orderId, // We still have the orderId
+            null, // No signature on failure
+            userLoanId
+          );
         } catch (err) {
           console.error("Error while verifying failed payment:", err);
         }

@@ -3,10 +3,10 @@ import {
   GoogleLogin,
   CredentialResponse,
 } from "@react-oauth/google";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUserToken } from "@/redux/slice/UserTokenSlice";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   // "1062985600515-9aj5fj7gs3n31mpjurcsjuap8iicc746.apps.googleusercontent.com";
@@ -21,7 +21,7 @@ const GoogleLoginComponent = () => {
       }
       const token: string = credentialResponse.credential;
 
-      const response = await userAxiosInstance.post("google-login", { token });
+      const response = await authService.googleLogin(token);
 
       if (response.data.success) {
         dispatch(addUserToken(response.data.accessToken));

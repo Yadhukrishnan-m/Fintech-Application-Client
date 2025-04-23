@@ -1,32 +1,29 @@
-
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoanDetails from "@/components/user/loans/LoanDetails";
 import { Loader2 } from "lucide-react";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import Header from "@/components/user/shared/Header";
 import Footer from "@/components/user/shared/Footer";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-
+import { loanServices } from "@/api/user/LoanService";
 
 export default function LoanDetailsPage() {
   const { id } = useParams();
   const [loan, setLoan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [interest, setInterest]=useState('')
-
+  const [interest, setInterest] = useState("");
 
   useEffect(() => {
     const fetchLoanData = async () => {
+      if (!id) {
+        return;
+      }
       try {
         setLoading(true);
-        const response = await userAxiosInstance.get(`/loan/${id}`);
+        const response = await loanServices.getLoanById(id);
         if (response.data.success) {
           setLoan(response.data.loan);
-        
-          
         } else {
           setError("Failed to load loan details");
         }
@@ -38,33 +35,30 @@ export default function LoanDetailsPage() {
       }
     };
 
+    const getInterest = async () => {
+      if (!id) {
+        return;
+      }
+      try {
+        const response = await loanServices.getInterestById(id);
+        if (response.data.success) {
+          setInterest(response.data.interest);
+        } else if (response.data.message === "user not verified") {
+          setInterest("Not Verified");
+        } else {
+          setError("Failed to load interest details");
+        }
+      } catch (error) {
+        console.log(error);
 
-     const getInterest = async () => {
-       try {
-         const response = await userAxiosInstance.get(`/get-interest/${id}`, );
-         if (response.data.success) {
-           setInterest(response.data.interest);
-         } else if (response.data.message === "user not verified") {
-           setInterest("Not Verified");
-           
-           
-         } else {
-           setError("Failed to load interest details");
-         }
-       } catch (error) {
-         console.log(error);
+        setInterest("Not Verified");
+      }
+    };
 
-         setInterest("Not Verified");
-       }
-     };
-   
     if (id) {
-
       fetchLoanData();
-      
-         getInterest();
-      
-     
+
+      getInterest();
     }
   }, [id]);
 
@@ -101,12 +95,9 @@ export default function LoanDetailsPage() {
   return (
     <div className="bg-gray-100">
       <Header />
-          <Breadcrumb
-                  paths={[
-                    { name: "Loans", link: "/loans" },
-                    { name: "Loan Details" },
-                  ]}
-                />
+      <Breadcrumb
+        paths={[{ name: "Loans", link: "/loans" }, { name: "Loan Details" }]}
+      />
       <LoanDetails loan={loan} interest={interest} />
       <Footer />
     </div>

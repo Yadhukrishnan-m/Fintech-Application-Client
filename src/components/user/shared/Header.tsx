@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import store from "@/redux/store";
 import { BellIcon } from "lucide-react";
-import userAxiosInstance from "@/config/UserAxiosInstence";
+import { notificationServices } from "@/api/user/notificationService";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -12,7 +12,9 @@ export default function Header() {
 
    const totalUnreaded = useCallback(async () => {
      try {
-     const response=  await userAxiosInstance.get("/total-unreaded");
+          const response =
+            await notificationServices.getTotalUnreadNotifications();
+
         
        setTotalUnreadedcount(response.data.totalNotifications);
      } catch (error) {

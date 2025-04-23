@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import moment from "moment";
 
 import { Bell } from "lucide-react";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import socket, { registerUser } from "@/config/socket";
+import { notificationServices } from "@/api/user/notificationService";
 
 // Simplified notification interface
 interface Notification {
@@ -19,7 +19,7 @@ export default function Notifications() {
   const [userId, setUserId] = useState("");
   const fetchNotification = useCallback(async () => {
     try {
-      const response = await userAxiosInstance.get("/get-notifications");
+      const response = await notificationServices.getNotifications();
       setNotifications(response.data.notifications || []);
       setUserId(response.data.userId);
     } catch (error) {
@@ -29,7 +29,7 @@ export default function Notifications() {
 
     const makeasReaded = useCallback(async () => {
       try {
-        await userAxiosInstance.get("/notifications-mark-read");
+      await notificationServices.markAllAsRead();
        
       } catch (error) {
         console.error("Error fetching notifications:", error);

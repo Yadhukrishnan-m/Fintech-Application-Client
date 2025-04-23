@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import ProfileHeader from "@/components/user/profile/ProfileHeader"; // Import the ProfileHeader component
 import VerifiedProfileDetails from "@/components/user/profile/VerifiedProfile";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 interface User {
   customerId: string;
@@ -42,13 +42,7 @@ function ProfilePage() {
 
 const fetchUser = useCallback(async () => {
   try {
-    const response = await userAxiosInstance.get("/get-user", {
-      headers: {
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        "If-Modified-Since": "0",
-      },
-    });
+    const response = await authService.getUser();
 
     setUser(response.data.user);
 

@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import userAxiosInstance from "@/config/UserAxiosInstence"; // Replace with your axios instance
 import { useNavigate } from "react-router-dom";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
 import  { AxiosError } from "axios";
+import { authService } from "@/api/AuthServiceAndProfile";
 // ✅ Define password validation schema
 const passwordSchema = z
   .object({
@@ -41,10 +41,10 @@ export default function ChangePassword() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await userAxiosInstance.patch("/change-password", {
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
-      });
+    const response = await authService.changePassword(
+      data.currentPassword,
+      data.newPassword
+    );
 
       if (response.data.success) {
         SuccessToast("Password changed successfully!");

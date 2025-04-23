@@ -1,5 +1,5 @@
+import { loanServices } from "@/api/user/LoanService";
 import { ErrorToast } from "@/components/shared/Toast";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -18,8 +18,8 @@ const [loans, setLoans] = useState<Loan[]>([]);
 const navigate=useNavigate()
   useEffect(() => {
     const fetchLoans = async () => {
-      try {
-        const response = await userAxiosInstance.get("/loans"); 
+      try { 
+          const response = await loanServices.getLoans();
       setLoans(response.data.loans.slice(0, 3));
         console.log(response.data.loans);
         

@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useParams } from "react-router-dom";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { AxiosError } from "axios";
 import { ErrorToast, SuccessToast } from "../shared/Toast";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 // Validation Schema
 const resetPasswordSchema = z
@@ -58,11 +58,9 @@ export default function ResetPassword() {
     setIsLoading(true);
     setErrorMsg("");
     setSuccessMsg("");
+    
     try {
-      const response = await userAxiosInstance.post("/reset-password", {
-        password: values.password,
-        token, // Send token with request
-      });
+     const response = await authService.resetPassword(values.password, token);
 
       if (response.data.success) {
         SuccessToast("Your password has been reset successfully.")

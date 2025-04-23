@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import { Button } from "../../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { useDispatch } from "react-redux";
 // import { removeAdminToken } from "@/redux/slice/AdminTokenSlice";
 import AlertDialog from "@/components/shared/AlertDialog";
 import { removeUserToken } from "@/redux/slice/UserTokenSlice";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 interface MenuItem {
   path?: string;
@@ -37,7 +37,7 @@ const UserSidebar: React.FC = () => {
 
   const handleLogoutConfirm = async () => {
     try {
-      await userAxiosInstance.post("/logout");
+    await authService.logout();
       dispatch(removeUserToken());
     } catch (error) {
       console.error("Logout error:", error);

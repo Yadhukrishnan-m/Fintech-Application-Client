@@ -2,11 +2,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import LoanList from "@/components/user/loans/LoanListing";
 import { Loader2 } from "lucide-react";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import Header from "@/components/user/shared/Header";
 import Footer from "@/components/user/shared/Footer";
 import debounce from "lodash.debounce";
 import Pagination from "@/components/shared/Pagination";
+import { loanServices } from "@/api/user/LoanService";
 
 export default function LoansPage() {
   const [loans, setLoans] = useState([]);
@@ -21,9 +21,11 @@ export default function LoansPage() {
   const fetchLoans = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await userAxiosInstance.get("/loans", {
-        params: { page: currentPage, search: searchQuery, sortBy },
-      });
+       const response = await loanServices.getLoans(
+         currentPage,
+         searchQuery,
+         sortBy
+       );
 
       if (response.data.success) {
         setLoans(response.data.loans);

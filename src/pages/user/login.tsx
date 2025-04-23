@@ -4,7 +4,7 @@ import Footer from '../../components/user/shared/Footer'
 import Header from '@/components/user/shared/Header'
 import { useDispatch } from 'react-redux';
 import { addUserToken } from '@/redux/slice/UserTokenSlice';
-import { authService } from '@/api/AuthService';
+import { authService } from '@/api/AuthServiceAndProfile';
 
 function Login() {
   const navigate = useNavigate();

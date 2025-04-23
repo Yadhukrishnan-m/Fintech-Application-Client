@@ -21,8 +21,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { ErrorToast, SuccessToast } from "../shared/Toast";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 // Validation Schema
 const loginSchema = z.object({
@@ -52,12 +52,8 @@ export default function ForgotPasswordEmail() {
     setErrormsg("");
     setSuccessMsg("");
     try {
-      const response = await userAxiosInstance.post(
-        "forgot-password",
-        {
-          email: values.email,
-        }
-      );
+            const response = await authService.forgotPassword(values.email);
+
 
       if (response.data.success) {
         SuccessToast("A password reset link has been sent to your email.");

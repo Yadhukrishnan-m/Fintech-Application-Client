@@ -4,8 +4,8 @@ import { ChatContainer } from "@/components/shared/chat/ChatContainer";
 // import { Button } from "@/components/ui/button";
 // import { ArrowLeft } from "lucide-react";
 import { IChat, IMessage, IUser } from "@/interfaces/interfaces";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import socket from "@/config/socket";
+import { chatServices } from "@/api/user/chatService";
 // import socket, { registerChat } from "@/config/socket";
 
 export default function UserChatPage() {
@@ -18,7 +18,8 @@ export default function UserChatPage() {
 
   const fetchChat = useCallback(async () => {
     try {
-      const response = await userAxiosInstance.get("/get-chat");
+         const response = await chatServices.getChat();
+
       setChat(response.data.chat);
       setMessages(response.data.messages || []);
       
@@ -76,17 +77,23 @@ export default function UserChatPage() {
     // if (!admin || !isConnected) return;
 
     // const chat_id = `chat_${userId}_${admin._id}`;
-    const message: Partial<IMessage> = {
-        chat_id:chat?._id,
-        content,
+    type MessagePayload = {
+  chat_id: string;
+  content: string;}
+    const message: MessagePayload = {
+      chat_id: chat?._id || "",
+      content,
     };
     console.log(socket, message, )
     async function send(){
+      if (!message.chat_id || !message.content) {
+        console.error("Message must have a valid chat_id and content.");
+        return;
+      }
+      
         try {
-             const response = await userAxiosInstance.post(
-               "/send-message",
-               message
-             );
+              const response = await chatServices.sendMessage(message);
+
 
              if (response.data.success) {
             //    setMessages((prev) => [

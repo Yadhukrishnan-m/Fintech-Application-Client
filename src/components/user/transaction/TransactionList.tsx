@@ -10,7 +10,7 @@ import debounce from "lodash.debounce";
 import TransactionCard from "@/components/shared/TransactionCard"; // Import the new component
 import { ITransaction } from "@/interfaces/interfaces";
 import Pagination from "@/components/shared/Pagination";
-import userAxiosInstance from "@/config/UserAxiosInstence";
+import { transactionService } from "@/api/user/transactionService";
 
 
 
@@ -35,15 +35,14 @@ export default function TransactionList() {
   const fetchTransactions = useCallback(async () => {
   setLoading(true);
   try {
-    const response = await userAxiosInstance.get("/transactions", {
-      params: {
-        page: currentPage,
-        search: searchQuery,
-        sortBy,
-        statusFilter,
-        typeFilter
-      },
-    });
+       const response = await transactionService.getTransactions(
+         currentPage,
+         searchQuery,
+         sortBy,
+         statusFilter,
+         typeFilter
+       );
+
 
     setTransactions(response.data.transactions);
     setTotalPages(response.data.totalPages || 1);

@@ -1,11 +1,10 @@
 import Loader from "@/components/shared/Loader";
 import Pagination from "@/components/shared/Pagination";
-
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {  IUserLoanPopulated } from "@/interfaces/interfaces";
 import UserLoanListCard from "@/components/user/userLoan/UserLoanList";
+import { userLoanService } from "@/api/user/userLoanService";
 
 const UserLoanListPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -17,11 +16,7 @@ const UserLoanListPage = () => {
   const fetchLoans = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await userAxiosInstance.get("/user-loans", {
-        params: {
-          page: currentPage,
-        },
-      });
+     const response = await userLoanService.getUserLoans(currentPage);
 console.log(response.data);
 
       setLoans(response.data.userLoans.userLoan);

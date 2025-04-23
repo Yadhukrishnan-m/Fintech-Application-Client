@@ -182,3 +182,13 @@ export interface IChatUser {
   last_message_at: string;
   unread_messages: number;
 }
+
+
+
+export interface ContactFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+}

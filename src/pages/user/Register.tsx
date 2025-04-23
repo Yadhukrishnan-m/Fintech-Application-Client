@@ -25,7 +25,8 @@ import OtpModal from "@/components/user/OtpModal";
 import {  SuccessToast } from "@/components/shared/Toast";
 import Header from "@/components/user/shared/Header";
 import Footer from "@/components/user/shared/Footer";
-import { authService } from "@/api/AuthService";
+import { authService } from "@/api/AuthServiceAndProfile";
+import GoogleLoginComponent from "@/components/user/GoogleLogin";
 
 // Validation schema
 const formSchema = z
@@ -211,6 +212,7 @@ export default function Register() {
                 </Button>
               </form>
             </Form>
+            <GoogleLoginComponent />
           </CardContent>
           <CardFooter className="flex justify-center pt-4">
             <p className="text-sm">
@@ -231,7 +233,7 @@ export default function Register() {
           email={storedFormValues?.email || ""}
         />
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 }

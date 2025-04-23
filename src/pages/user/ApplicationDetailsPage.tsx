@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import ApplicationDetails from "../../components/user/application/ApplicationDetails";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import { ILoanApplication } from "@/interfaces/interfaces";
 import { useParams } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { applicationService } from "@/api/user/applicationService";
 
 const ApplicationDetailsPage = () => {
 const [applicationData, setApplicationData] = useState<ILoanApplication | null>(
@@ -15,10 +15,11 @@ const {id}=useParams()
 
     const fetchApplications = useCallback(async () => {
       setLoading(true);
+      if (!id) {
+        return 
+      }
       try {
-        const response = await userAxiosInstance.get(
-          `/application/${id}/details`
-        );
+       const response = await applicationService.getApplicationDetails(id);
 console.log();
 
         setApplicationData(response.data.application);

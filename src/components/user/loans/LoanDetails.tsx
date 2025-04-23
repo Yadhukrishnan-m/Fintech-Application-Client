@@ -1,7 +1,7 @@
 // import { Badge } from "@/components/ui/badge";
+import { authService } from "@/api/AuthServiceAndProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import userAxiosInstance from "@/config/UserAxiosInstence";
 import store from "@/redux/store";
 import { CalendarDays, Check, Clock, DollarSign, Loader2, Percent } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const [isloading,setisloading]=useState(false)
     const fetchUserData = async () => {
       try {
         setisloading(true)
-        const response = await userAxiosInstance.get(`/get-user`);
+        const response = await authService.getUser()
         if (response.data.success) {
           console.log(response.data.user);
           
