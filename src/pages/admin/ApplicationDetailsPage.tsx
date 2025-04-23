@@ -1,13 +1,12 @@
 import ApplicationDetails from "@/components/admin/ApplicationDetails";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  ILoanApplicationResponse,
   ILoanApplication,
 } from "../../interfaces/interfaces";
 import { Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { applicationService } from "@/api/admin/ApplicationServices";
 
 function ApplicationDetailsPage() {
   const { id } = useParams();
@@ -19,9 +18,7 @@ function ApplicationDetailsPage() {
   useEffect(() => {
     async function fetchApplication() {
       try {
-        const response = await adminAxiosInstance.get<ILoanApplicationResponse>(
-          `/application/${id}`
-        );
+       const response = await applicationService.getApplicationById(id!); 
         if (response.data.success) {
           setApplication(response.data.application);
         } else {

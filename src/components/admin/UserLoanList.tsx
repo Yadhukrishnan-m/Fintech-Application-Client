@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import DataTable, { Column } from "@/components/shared/DataTable";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Pagination from "@/components/shared/Pagination";
 import debounce from "lodash.debounce";
 import { Loader2 } from "lucide-react";
 import {   IUserLoanPopulated } from "@/interfaces/interfaces";
+import { userLoanService } from "@/api/admin/UserLoanServices";
 
 type ExtendedUserLoan = Omit<IUserLoanPopulated, "loanId" | "userId"> & {
   loanName: string;
@@ -54,14 +54,12 @@ function UserLoanList() {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await adminAxiosInstance.get("/get-userloan", {
-        params: {
-          page: currentPage,
-          search: searchQuery,
-          sortBy,
-          
-        },
-      });
+           const response = await userLoanService.getUserLoans(
+             currentPage,
+             searchQuery,
+             sortBy
+           );
+
 
       setUserLoans(response.data.userLoans);
       setTotalPages(response.data.totalPages || 1);

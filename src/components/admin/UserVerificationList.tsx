@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import DataTable, { Column } from "@/components/shared/DataTable";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Pagination from "@/components/shared/Pagination";
 import debounce from "lodash.debounce";
+import { userManagementService } from "@/api/admin/userManagementService";
 
 interface User {
   customerId: string;
@@ -44,14 +44,12 @@ function UserVerificationList() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await adminAxiosInstance.get("/unverified-users", {
-        params: {
-          page: currentPage,
-          search: searchQuery,
-          sortBy,
-          filter,
-        },
-      });
+    const response = await userManagementService.getUnverifiedUsers({
+      currentPage,
+      searchQuery,
+      sortBy,
+      filter,
+    });
 
       setUsers(response.data.users.users);
       setTotalPages(response.data.users.totalPages || 1);

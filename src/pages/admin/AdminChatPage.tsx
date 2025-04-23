@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { IChat, IChatUser, IMessage } from "@/interfaces/interfaces";
 
 import socket from "@/config/socket";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { chatServices } from "@/api/admin/ChatServices";
 
 export default function AdminChatPage() {
   const [adminId, setAdminId] = useState<string>("");
@@ -20,7 +20,7 @@ export default function AdminChatPage() {
 
   const fetchChat = useCallback(async (userId: string) => {
     try {
-      const response = await adminAxiosInstance.get(`/get-chat/${userId}`);
+        const response = await chatServices.fetchChatByUserId(userId);
       setChat(response.data.chat);
       setMessages(response.data.messages || []);
     } catch (error) {
@@ -31,7 +31,7 @@ export default function AdminChatPage() {
   useEffect(() => {
     const fetchUsersWithLastChats = async () => {
       try {
-        const response = await adminAxiosInstance.get("/all-chats");
+      const response = await chatServices.fetchAllChats();
         setUsers(response.data.chats);
         setAdminId(response.data.adminId);
       } catch (error) {
@@ -84,10 +84,7 @@ export default function AdminChatPage() {
 
     const send = async () => {
       try {
-        await adminAxiosInstance.post(
-          "/send-message",
-          message
-        );
+   await chatServices.sendMessage(message);
       } catch (error) {
         console.error("Send message error:", error);
       }

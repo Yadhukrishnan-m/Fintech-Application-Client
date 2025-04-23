@@ -12,8 +12,8 @@ import { EmiStatusChart } from "@/components/admin/userLoanDetails/UserLoanChart
 
 import { IEMI, IUserLoan } from "@/interfaces/interfaces";
 import { useParams } from "react-router-dom";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { userLoanService } from "@/api/admin/UserLoanServices";
 
 function EmiDetails() {
   const [emiData, setEmiData] = useState<IEMI[]>();
@@ -21,10 +21,12 @@ function EmiDetails() {
   const { userLoanId } = useParams();
   useEffect(() => {
     async function fetchLoanData() {
+      if (!userLoanId) {
+        return
+      }
       try {
-        const response = await adminAxiosInstance.get(
-          `/user-loan/emis/${userLoanId}`
-        );
+           const response = await userLoanService.getUserLoanEmis(userLoanId);
+
         setEmiData(response.data.emi);
         setLoanDetails(response.data.userLoan);
       } catch (error) {

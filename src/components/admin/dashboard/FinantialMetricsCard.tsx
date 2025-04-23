@@ -7,7 +7,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { dashboardServices } from "@/api/admin/DashboardService";
 
 interface MetricCardProps {
   title: string;
@@ -52,9 +52,8 @@ export function FinancialMetricsCards() {
 
     async function getTotals(){
         try {
-               const responce = await adminAxiosInstance.get(
-                 "/dashboard/get-totals"
-               );
+                    const responce = await dashboardServices.getTotals();
+
                console.log(responce);
 
                if (responce.data.success) {

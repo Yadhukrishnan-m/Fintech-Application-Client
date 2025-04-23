@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { CreditCard, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import { useNavigate, useParams } from "react-router-dom";
+import { userLoanService } from "@/api/admin/UserLoanServices";
 
 interface Loan {
   _id: string;
@@ -26,10 +26,11 @@ export default function LoansOfUser() {
  const navigate=useNavigate()
   useEffect(() => {
     const fetchUserLoans = async () => {
+      if (!id) {
+        return
+      }
       try {
-        const response = await adminAxiosInstance.get(
-          `/user/user-loans/${id}`
-        );
+           const response = await userLoanService.getLoansOfUser(id);
 
         setUserLoans(response.data.userLoans);
       } catch (error) {

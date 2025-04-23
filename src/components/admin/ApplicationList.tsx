@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import DataTable, { Column } from "@/components/shared/DataTable";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Pagination from "@/components/shared/Pagination";
 import debounce from "lodash.debounce";
 import { Loader2 } from "lucide-react";
+import { applicationService } from "@/api/admin/ApplicationServices";
 
 interface User {
   applicationId:string
@@ -50,14 +50,13 @@ function ApplicationList() {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await adminAxiosInstance.get("/applications", {
-        params: {
-          page: currentPage,
-          search: searchQuery,
-          sortBy,
-          filter,
-        },
-      });
+            const response = await applicationService.getApplications(
+              currentPage,
+              searchQuery,
+              sortBy,
+              filter
+            );
+
 
       setApplications(response.data.applications.applications);
       setTotalPages(response.data.applications.totalPages || 1);

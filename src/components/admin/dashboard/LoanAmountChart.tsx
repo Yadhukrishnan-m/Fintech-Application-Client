@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TimeFrameSelector } from "./TimeFrameSelector";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { dashboardServices } from "@/api/admin/DashboardService";
 
 type TimeFrame = "monthly" | "yearly";
 
@@ -29,9 +29,10 @@ export function LoanAmountChart() {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await adminAxiosInstance.get(
-        `/dashboard/transaction-chart/${timeFrame}`
-      );
+          const response = await dashboardServices.getTransactionChart(
+            timeFrame
+          );
+
       setData(response.data.data);
     } catch (error) {
       console.error("Failed to fetch chart data:", error);

@@ -10,7 +10,7 @@ import { Bell, Send, User, Users } from "lucide-react";
 import { z } from "zod";
 import axios from "axios";
 import { ErrorToast, SuccessToast } from "../shared/Toast";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { notificationServices } from "@/api/admin/NotificationServices";
 
 
 const notificationSchema = z
@@ -86,13 +86,12 @@ const NotificationForm = () => {
     setIsSubmitting(true);
 
     try {
-    const response =await  adminAxiosInstance.post("/create-notification", {
+    const response = await notificationServices.createNotification(
       type,
       title,
       message,
-      userId: type === "personal" ? userId : undefined,
-    });
-      
+      userId
+    );
     if (response.data.success) {
          SuccessToast(
            `Notification ${type === "global" ? "broadcast" : "sent"}!`

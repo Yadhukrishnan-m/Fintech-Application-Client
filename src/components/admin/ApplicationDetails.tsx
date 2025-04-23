@@ -20,10 +20,10 @@ import {
 import { AlertCircle, CheckCircle, FileText, Loader2, X } from "lucide-react";
 import { ILoanApplication } from "../../interfaces/interfaces";
 import AlertDialog from "../shared/AlertDialog";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import { useNavigate } from "react-router-dom";
 import { ErrorToast, SuccessToast } from "../shared/Toast";
 import { AxiosError } from "axios";
+import { applicationService } from "@/api/admin/ApplicationServices";
 interface ApplicationDetailsProps {
   applicationData: ILoanApplication;
 }
@@ -50,16 +50,19 @@ const [loading, setLoading] = useState(false);
 setLoading(true)
         if (actionType==='approve') {
             payload = { status: "approved" };
-        }
+        }else
 
         if (actionType === "reject") {
           payload = { status: "rejected", message: rejectionReason };
+        }else{
+          return
         }
 
-        const response = await adminAxiosInstance.patch(
-          `/verify-application/${application._id}`,
+        const response = await applicationService.verifyApplication(
+          application._id,
           payload
         );
+
 
         if (response.data.success) {
             SuccessToast('successfully updated')

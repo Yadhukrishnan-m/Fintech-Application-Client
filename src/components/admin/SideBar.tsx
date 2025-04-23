@@ -18,8 +18,8 @@ import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeAdminToken } from "@/redux/slice/AdminTokenSlice";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import AlertDialog from "../shared/AlertDialog";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 interface MenuItem {
   path?: string;
@@ -40,7 +40,7 @@ const UserSidebar: React.FC = () => {
 
   const handleLogoutConfirm = async (): Promise<void> => {
     try {
-      const response = await adminAxiosInstance.post("/logout");
+      const response = await authService.adminLogout();
       if (response.data.success) {
         dispatch(removeAdminToken());
       }

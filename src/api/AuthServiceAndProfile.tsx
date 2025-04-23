@@ -1,3 +1,4 @@
+import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import userAxiosInstance from "../config/UserAxiosInstence";
 
 interface RegisterPayload {
@@ -18,6 +19,9 @@ export const authService = {
   login: async (credentials: { email: string; password: string }) => {
     return await userAxiosInstance.post("/login", credentials);
   },
+  adminLogin: async (credentials: { email: string; password: string }) => {
+    return await adminAxiosInstance.post("/login", credentials);
+  },
   resetPassword: async (password: string, token: string | undefined) => {
     return await userAxiosInstance.post("/reset-password", {
       password,
@@ -26,6 +30,9 @@ export const authService = {
   },
 
   logout: async () => {
+    return await userAxiosInstance.post("/logout");
+  },
+  adminLogout: async () => {
     return await userAxiosInstance.post("/logout");
   },
   changePassword: async (currentPassword: string, newPassword: string) => {

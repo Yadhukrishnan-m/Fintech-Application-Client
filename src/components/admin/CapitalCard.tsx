@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AddCapitalModal } from "../admin/CapitalAddModal";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { transactionService } from "@/api/admin/TransactionServices";
 
 const CapitalCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +12,7 @@ const CapitalCard: React.FC = () => {
   // Fetch capital from the API
   const fetchCapital = async () => {
     try {
-      const response = await adminAxiosInstance.get("/get-capital");
+      const response = await transactionService.getCapital();
       setCapital(response.data.capital.availableBalance);
     } catch (error) {
       console.error("Error fetching capital:", error);
@@ -26,9 +26,7 @@ const CapitalCard: React.FC = () => {
   const handleSubmit = (amount: number) => {
     const addCapital = async () => {
       try {
-        await adminAxiosInstance.post("/add-capital", {
-          amount,
-        });
+      await transactionService.addCapital(amount);
         fetchCapital(); 
       } catch (error) {
         console.error("Error adding capital:", error);

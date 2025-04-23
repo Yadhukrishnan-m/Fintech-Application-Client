@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { dashboardServices } from "@/api/admin/DashboardService";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -43,16 +43,10 @@ const ReportDownloader: React.FC<{ className?: string }> = ({ className }) => {
 
     try {
       setPdfLoading(true);
-      const res = await adminAxiosInstance.post(
-        "/dashboard/report/pdf",
-        {
-          startDate: dateRange[0],
-          endDate: dateRange[1],
-        },
-        {
-          responseType: "blob", // Get binary data
-        }
-      );
+           const res = await dashboardServices.generateReportPDF(
+             dateRange
+           );
+
 
       const blob = new Blob([res.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
@@ -86,12 +80,8 @@ const ReportDownloader: React.FC<{ className?: string }> = ({ className }) => {
     
     try {
       setExcelLoading(true)
-      const res = await adminAxiosInstance.post("/dashboard/report/excel", {
-        startDate: dateRange[0],
-        endDate: dateRange[1],
-      }, {
-        responseType: "blob", // Get binary data
-      });
+          const res = await dashboardServices.generateReportPDF(dateRange);
+
 
       const blob = new Blob([res.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

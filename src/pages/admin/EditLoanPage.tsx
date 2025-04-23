@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddLoanForm from "@/components/admin/AddLoanForm";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
+import { loanServices } from "@/api/admin/LoanService";
 
 export default function EditLoanPage() {
   const { id } = useParams(); 
@@ -12,9 +12,11 @@ export default function EditLoanPage() {
     if (!id) return;
 
     async function fetchLoanData() {
+      if (!id) {
+        return
+      }
       try {
-        const response = await adminAxiosInstance.get(`/loan/${id}`);
-
+const response = await loanServices.getLoanById(id);
         const data = response.data.loan;
 
         const modifiedData = {

@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import DataTable, { Column } from "@/components/shared/DataTable";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import Pagination from "@/components/shared/Pagination";
 import debounce from "lodash.debounce";
 import { useNavigate } from "react-router-dom";
 import { ErrorToast } from "../shared/Toast";
 import { Loader2 } from "lucide-react";
+import { loanServices } from "@/api/admin/LoanService";
 
 interface Loan {
   _id:string
@@ -51,15 +51,13 @@ function LoanList() {
   const fetchLoans = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await adminAxiosInstance.get("/loans", {
-        params: {
-          page: currentPage,
-          search: searchQuery,
-          sortBy,
-          isActive:
-            filterActive !== "all" ? filterActive === "active" : undefined,
-        },
-      });
+             const response = await loanServices.getLoans(
+               currentPage,
+               searchQuery,
+               sortBy,
+               filterActive
+             );
+
       setLoans(response.data.loans);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -111,7 +109,7 @@ function LoanList() {
 
   const toggleLoanActivation = async (loan: Loan) => {
     try {
-      await adminAxiosInstance.patch(`/loans/${loan._id}/toggle-status`);
+      await loanServices.toggleLoanStatus(loan._id); 
       setLoans((prevLoans) =>
         prevLoans.map((l) =>
           l.loanId === loan.loanId ? { ...l, isActive: !l.isActive } : l

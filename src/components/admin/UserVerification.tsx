@@ -28,11 +28,11 @@
     Loader2,
     X,
   } from "lucide-react";
-  import adminAxiosInstance from "@/config/AdminAxiosInstence";
   import { useNavigate, useParams } from "react-router-dom";
   import AlertDialog from "../shared/AlertDialog";
   import { ErrorToast, SuccessToast } from '../shared/Toast'
 import { Textarea } from "../ui/textarea";
+import { userManagementService } from "@/api/admin/userManagementService";
   // Define the customer data type
   enum CustomerStatus {
     PENDING = "pending",
@@ -87,9 +87,15 @@ import { Textarea } from "../ui/textarea";
     // Fetch data on component mount and on every re-render
     useEffect(() => {
       const fetchCustomerData = async () => {
+        if (!id) {
+          return
+        }
         setLoading(true);
         try {
-          const response = await adminAxiosInstance.get(`/user/${id}`);
+                const response = await userManagementService.getUserById(
+                  id
+                );
+
           console.log(response.data.user);
 
           setCustomer(response.data.user);
@@ -110,12 +116,16 @@ import { Textarea } from "../ui/textarea";
 
     const handleConfirmAction = async () => {
       if (!actionType) return;
+      if (!id) {
+        return
+      }
 
       try {
-        const response = await adminAxiosInstance.patch(`/verify-user/${id}`, {
-          status: actionType === "verify" ? true : false,
-          message: actionType === "reject" ? rejectionReason : undefined,
-        });
+     const response = await userManagementService.verifyUserStatus(
+       id,
+       actionType,
+       rejectionReason
+     );
 
         if (response.data.success) {
         SuccessToast('verification status changed');
@@ -157,11 +167,12 @@ import { Textarea } from "../ui/textarea";
 
   const confirmBlacklistToggle = async () => {
     if (isBlacklisting === null) return;
+    if (!id) {
+      return
+    }
 
     try {
-      const response = await adminAxiosInstance.patch(`/blacklist-user/${id}`, {
-        action: isBlacklisting, // `true` for blacklist, `false` for unblacklist
-      });
+   const response = await userManagementService.blacklistUser(id, isBlacklisting);
 
       if (response.data.success) {
         SuccessToast("successfully updated blacklisting status");

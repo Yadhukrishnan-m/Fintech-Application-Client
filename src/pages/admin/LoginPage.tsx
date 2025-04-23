@@ -1,5 +1,5 @@
+import { authService } from '@/api/AuthServiceAndProfile';
 import Login from '@/components/shared/Login'
-import adminAxiosInstance from '@/config/AdminAxiosInstence';
 import { addAdminToken } from '@/redux/slice/AdminTokenSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ function LoginPage() {
         email: string;
         password: string;
       }) => {
-        const response = await adminAxiosInstance.post("/login", values);
+        const response = await authService.adminLogin( values);
        
         console.log(response.data.success);
 

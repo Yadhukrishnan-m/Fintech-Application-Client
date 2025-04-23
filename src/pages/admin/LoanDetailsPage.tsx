@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoanDetails from "@/components/admin/LoanDetails";
-import adminAxiosInstance from "@/config/AdminAxiosInstence";
 import { Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/shared/Breadcrumb";
+import { loanServices } from "@/api/admin/LoanService";
 
 export default function LoanDetailsPage() {
   const { id } = useParams();
@@ -14,9 +14,12 @@ export default function LoanDetailsPage() {
   const [error, setError] = useState("");
   useEffect(() => {
     const fetchLoanData = async () => {
+      if (!id) {
+        return
+      }
       try {
         setLoading(true);
-        const response = await adminAxiosInstance.get(`/loan/${id}`);
+        const response = await loanServices.getLoanById(id)
         if (response.data.success) {
           setLoan(response.data.loan);
         } else {
