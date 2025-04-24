@@ -161,64 +161,68 @@ export default function ApplicationDetails({
           </div>
         </CardHeader>
 
-        {riskLevel === "high" && (
-          <div className="mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
-            <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
-              <div>
-                <h4 className="font-semibold text-red-700">
-                  High Risk Application
-                </h4>
-                <p className="text-red-600 mt-1">
-                  Average monthly EMI (
-                  {formatCurrency(application.averageMonthlyEmi)}) exceeds{" "}
-                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
-                  {formatCurrency(application.monthlyIncome)}). This application
-                  poses a high repayment risk.
-                </p>
+        {application.status === "pending" && (
+          <>
+            {riskLevel === "high" && (
+              <div className="mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
+                <div className="flex items-start">
+                  <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-red-700">
+                      High Risk Application
+                    </h4>
+                    <p className="text-red-600 mt-1">
+                      Average monthly EMI (
+                      {formatCurrency(application.averageMonthlyEmi)}) exceeds{" "}
+                      {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                      {formatCurrency(application.monthlyIncome)}). This
+                      application poses a high repayment risk.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            )}
 
-        {riskLevel === "medium" && (
-          <div className="mb-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
-            <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5" />
-              <div>
-                <h4 className="font-semibold text-amber-700">
-                  Medium Risk Application
-                </h4>
-                <p className="text-amber-600 mt-1">
-                  Average monthly EMI (
-                  {formatCurrency(application.averageMonthlyEmi)}) is{" "}
-                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
-                  {formatCurrency(application.monthlyIncome)}). Borrower may
-                  face financial strain during repayment.
-                </p>
+            {riskLevel === "medium" && (
+              <div className="mb-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="flex items-start">
+                  <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-amber-700">
+                      Medium Risk Application
+                    </h4>
+                    <p className="text-amber-600 mt-1">
+                      Average monthly EMI (
+                      {formatCurrency(application.averageMonthlyEmi)}) is{" "}
+                      {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                      {formatCurrency(application.monthlyIncome)}). Borrower may
+                      face financial strain during repayment.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            )}
 
-        {riskLevel === "low" && (
-          <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-              <div>
-                <h4 className="font-semibold text-green-700">
-                  Low Risk Application
-                </h4>
-                <p className="text-green-600 mt-1">
-                  Average monthly EMI (
-                  {formatCurrency(application.averageMonthlyEmi)}) is only{" "}
-                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
-                  {formatCurrency(application.monthlyIncome)}). Applicant has
-                  strong repayment capacity.
-                </p>
+            {riskLevel === "low" && (
+              <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-green-700">
+                      Low Risk Application
+                    </h4>
+                    <p className="text-green-600 mt-1">
+                      Average monthly EMI (
+                      {formatCurrency(application.averageMonthlyEmi)}) is only{" "}
+                      {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                      {formatCurrency(application.monthlyIncome)}). Applicant
+                      has strong repayment capacity.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
 
         <CardContent className="pt-6">
