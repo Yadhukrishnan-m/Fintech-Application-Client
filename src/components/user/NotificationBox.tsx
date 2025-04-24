@@ -4,6 +4,7 @@ import moment from "moment";
 import { Bell } from "lucide-react";
 import socket, { registerUser } from "@/config/socket";
 import { notificationServices } from "@/api/user/NotificationServices";
+import Pagination from "../shared/Pagination";
 
 // Simplified notification interface
 interface Notification {
@@ -17,15 +18,19 @@ interface Notification {
 export default function Notifications() {
   const [notifications, setNotifications] = useState<Notification[] | null>([]);
   const [userId, setUserId] = useState("");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);  
   const fetchNotification = useCallback(async () => {
     try {
-      const response = await notificationServices.getNotifications();
+      const response = await notificationServices.getNotifications(currentPage);
       setNotifications(response.data.notifications || []);
+              setTotalPages(response.data.totalPages);
+
       setUserId(response.data.userId);
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
-  }, []);
+  }, [currentPage]);
 
     const makeasReaded = useCallback(async () => {
       try {
@@ -35,6 +40,10 @@ export default function Notifications() {
         console.error("Error fetching notifications:", error);
       }
     }, []);
+
+      const handlePageChange = useCallback((newPage: number) => {
+        setCurrentPage(newPage);
+      }, []);
 
   useEffect(() => {
     fetchNotification();
@@ -149,6 +158,12 @@ export default function Notifications() {
                   </div>
                 )
               )}
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           ) : (
             <div className="py-12 text-center">
