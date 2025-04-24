@@ -14,6 +14,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 import EditProfileModal from "./EditProfileModal";
+import { authService } from "@/api/AuthServiceAndProfile";
+
 
 interface VerifiedUserData {
   _id: string;
@@ -37,21 +39,32 @@ interface VerifiedUserData {
   panDoc: string;
   panNumber: string;
 }
+interface User {
+  customerId: string;
+  name: string;
+  email: string;
+  phone?: number;
+  finscore?: number;
+  status: "pending" | "completed" | "rejected" | "verified";
+}
 
 interface VerifiedProfileDetailsProps {
   userData: VerifiedUserData;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export default function VerifiedProfileDetails({
   userData,
+  setUser
 }: VerifiedProfileDetailsProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const navigate = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const handleProfileUpdated = () => {
-    // In a real application, you might want to refetch the user data here
-    // For example: fetchUserData(userData._id)
+  const handleProfileUpdated = async () => {
+    const response = await authService.getUser();
+    
+   setUser(response.data.user)
   };
   return (
     <div className="space-y-8 mb-10">

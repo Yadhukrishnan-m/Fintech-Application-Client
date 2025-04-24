@@ -75,7 +75,10 @@ const fetchUser = useCallback(async () => {
       <ProfileHeader user={user} />
 
       {user?.status === "verified" && (
-        <VerifiedProfileDetails userData={ user as VerifiedUserData} />
+        <VerifiedProfileDetails
+          userData={user as VerifiedUserData}
+          setUser={setUser}
+        />
       )}
     </div>
   );

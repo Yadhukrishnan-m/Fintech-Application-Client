@@ -72,15 +72,12 @@ export const authService = {
     });
   },
 
-  updateProfile: async (
-  
-    updatedData: {
-      name: string;
-      phone: number;
-      job: string;
-      income: number;
-    }
-  ) => {
+  updateProfile: async (updatedData: {
+    name: string;
+    phone: number;
+    job: string;
+    income: number;
+  }) => {
     return await userAxiosInstance.put(`/update-profile-details`, updatedData);
   },
 };
