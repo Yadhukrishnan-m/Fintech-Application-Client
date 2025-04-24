@@ -21,7 +21,7 @@ export default function AdminChatPage() {
   const fetchChat = useCallback(async (userId: string) => {
     try {
         const response = await chatServices.fetchChatByUserId(userId);
-      setChat(response.data.chat);
+      setChat(response.data.chats);
       setMessages(response.data.messages || []);
     } catch (error) {
       console.error("Failed to fetch chat:", error);
