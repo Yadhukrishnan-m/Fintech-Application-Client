@@ -96,7 +96,15 @@ export default function VerifiedProfileDetails({
         <div className="p-6 border-t flex justify-end">
           <button
             onClick={() => navigate("/dashboard/change-password")}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center">
+            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"
+          >
+            <Lock className="h-5 w-5 mr-2" />
+            Edit  Details
+          </button>
+          <button
+            onClick={() => navigate("/dashboard/change-password")}
+            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"
+          >
             <Lock className="h-5 w-5 mr-2" />
             Change Password
           </button>
@@ -121,7 +129,7 @@ export default function VerifiedProfileDetails({
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Monthly Income</p>
+              <p className="text-sm text-gray-500">Annual Income</p>
               <p className="font-medium text-gray-800 flex items-center">
                 <DollarSign className="h-4 w-4 mr-1 text-teal-600" />₹
                 {userData.income.toLocaleString()}
