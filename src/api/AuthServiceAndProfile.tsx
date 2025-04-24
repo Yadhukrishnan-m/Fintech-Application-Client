@@ -71,4 +71,16 @@ export const authService = {
       email,
     });
   },
+
+  updateProfile: async (
+  
+    updatedData: {
+      name: string;
+      phone: number;
+      job: string;
+      income: number;
+    }
+  ) => {
+    return await userAxiosInstance.put(`/update-profile-details`, updatedData);
+  },
 };

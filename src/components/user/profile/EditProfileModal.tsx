@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { AxiosError } from "axios";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
-import axios from "axios";
+import { authService } from "@/api/AuthServiceAndProfile";
 
 // Define the form schema with Zod
 const formSchema = z.object({
@@ -63,7 +63,6 @@ interface EditProfileModalProps {
 
 export default function EditProfileModal({
   userData,
-  userId,
   onProfileUpdated,
   modalOpen,
   setModalOpen,
@@ -102,12 +101,12 @@ export default function EditProfileModal({
     try {
       setIsSubmitting(true);
 
-      await axios.put(`/api/users/${userId}`, {
-        name: data.name,
-        phone: Number(data.phone),
-        job: data.job,
-        income: Number(data.income),
-      });
+   await authService.updateProfile({
+     name: data.name,
+     phone: Number(data.phone),
+     job: data.job,
+     income: Number(data.income),
+   });
 
       setModalOpen(false);
       SuccessToast("Your profile has been updated successfully.");
