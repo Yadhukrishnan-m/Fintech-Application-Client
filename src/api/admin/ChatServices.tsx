@@ -5,16 +5,16 @@ import { IMessage } from "@/interfaces/interfaces";
 export const chatServices = {
   fetchAllChats: async () => {
     const response = await adminAxiosInstance.get("/all-chats");
-    return response.data;
+    return response;
   },
 
   fetchChatByUserId: async (userId: string) => {
     const response = await adminAxiosInstance.get(`/get-chat/${userId}`);
-    return response.data;
+    return response;
   },
 
   sendMessage: async (message: Partial<IMessage>) => {
     const response = await adminAxiosInstance.post("/send-message", message);
-    return response.data;
+    return response;
   },
 };
