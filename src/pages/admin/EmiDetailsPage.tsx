@@ -62,7 +62,7 @@ function EmiDetails() {
   const totalPaid = emiData
     .filter((emi) => emi.transaction)
     .reduce(
-      (sum, emi) => sum + (emi.transaction?.amount || 0) + emi.penalty,
+      (sum, emi) => sum + (emi.transaction?.amount || 0) ,
       0
     );
 
