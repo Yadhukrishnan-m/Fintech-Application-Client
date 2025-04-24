@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import EditProfileModal from "./EditProfileModal";
 
 interface VerifiedUserData {
   _id: string;
@@ -48,6 +49,12 @@ export default function VerifiedProfileDetails({
 }: VerifiedProfileDetailsProps) {
  const [selectedImage, setSelectedImage] = useState<string | null>(null);
  const navigate=useNavigate()
+
+  const handleProfileUpdated = () => {
+   
+    // In a real application, you might want to refetch the user data here
+    // For example: fetchUserData(userData._id)
+  };
   return (
     <div className="space-y-8 mb-10">
       {/* Personal Information Section */}
@@ -94,13 +101,16 @@ export default function VerifiedProfileDetails({
           </div>
         </div>
         <div className="p-6 border-t flex justify-end">
-          <button
-            onClick={() => navigate("/dashboard/change-password")}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"
-          >
-            <Lock className="h-5 w-5 mr-2" />
-            Edit  Details
-          </button>
+          <EditProfileModal
+            userData={{
+              name: userData.name,
+              phone: userData.phone,
+              job: userData.job,
+              income: userData.income,
+            }}
+            userId={userData._id}
+            onProfileUpdated={handleProfileUpdated}
+          />
           <button
             onClick={() => navigate("/dashboard/change-password")}
             className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"
