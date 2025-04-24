@@ -78,6 +78,6 @@ export const authService = {
     job: string;
     income: number;
   }) => {
-    return await userAxiosInstance.put("/update-profile-details", updatedData);
+    return await userAxiosInstance.patch("/update-profile-details", updatedData);
   },
 };
