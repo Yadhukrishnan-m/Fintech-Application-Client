@@ -1,5 +1,3 @@
-
-
 import {
   User,
   Calendar,
@@ -47,11 +45,11 @@ interface VerifiedProfileDetailsProps {
 export default function VerifiedProfileDetails({
   userData,
 }: VerifiedProfileDetailsProps) {
- const [selectedImage, setSelectedImage] = useState<string | null>(null);
- const navigate=useNavigate()
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   const handleProfileUpdated = () => {
-   
     // In a real application, you might want to refetch the user data here
     // For example: fetchUserData(userData._id)
   };
@@ -110,7 +108,17 @@ export default function VerifiedProfileDetails({
             }}
             userId={userData._id}
             onProfileUpdated={handleProfileUpdated}
+            modalOpen={editModalOpen}
+            setModalOpen={setEditModalOpen}
           />
+          <button
+            onClick={() => setEditModalOpen(true)}
+            className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"
+          >
+            <Lock className="h-5 w-5 mr-2" />
+            Edit Details
+          </button>
+
           <button
             onClick={() => navigate("/dashboard/change-password")}
             className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center"

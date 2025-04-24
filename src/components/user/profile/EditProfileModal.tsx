@@ -10,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Lock } from "lucide-react";
 import { AxiosError } from "axios";
 import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
 import axios from "axios";
@@ -58,14 +56,18 @@ interface EditProfileModalProps {
   };
   userId: string;
   onProfileUpdated?: () => void;
+  modalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
 }
+
 
 export default function EditProfileModal({
   userData,
   userId,
   onProfileUpdated,
+  modalOpen,
+  setModalOpen,
 }: EditProfileModalProps) {
-  const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize the form with default values from userData
@@ -89,40 +91,30 @@ export default function EditProfileModal({
     });
   };
 
-  // Handle modal open change
   const handleOpenChange = (newOpen: boolean) => {
     if (newOpen) {
       resetForm();
     }
-    setOpen(newOpen);
+    setModalOpen(newOpen); // ← controlled by parent
   };
 
   async function onSubmit(data: FormValues) {
     try {
       setIsSubmitting(true);
 
-      // Make API call to update user data
-      const response = await axios.put(`/api/users/${userId}`, {
+      await axios.put(`/api/users/${userId}`, {
         name: data.name,
         phone: Number(data.phone),
         job: data.job,
         income: Number(data.income),
       });
 
-      setOpen(false);
+      setModalOpen(false);
       SuccessToast("Your profile has been updated successfully.");
-
-      // Notify parent component that profile was updated
-      if (onProfileUpdated) {
-        onProfileUpdated();
-      }
+      if (onProfileUpdated) onProfileUpdated();
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data?.message) {
-          ErrorToast(error.response.data.message);
-        } else {
-          ErrorToast("An unexpected error occurred.");
-        }
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        ErrorToast(error.response.data.message);
       } else {
         ErrorToast("An unknown error occurred.");
       }
@@ -132,13 +124,7 @@ export default function EditProfileModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button className="bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-md flex items-center">
-          <Lock className="h-5 w-5 mr-2" />
-          Edit Details
-        </Button>
-      </DialogTrigger>
+    <Dialog open={modalOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
@@ -211,7 +197,7 @@ export default function EditProfileModal({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={() => setModalOpen(false)}
                 disabled={isSubmitting}
               >
                 Cancel
