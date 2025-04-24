@@ -100,7 +100,7 @@ export default function EditProfileModal({
   async function onSubmit(data: FormValues) {
     try {
       setIsSubmitting(true);
-
+      console.log("updating data"+data);
    await authService.updateProfile({
      name: data.name,
      phone: Number(data.phone),
