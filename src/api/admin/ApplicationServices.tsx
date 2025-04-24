@@ -1,10 +1,9 @@
 import adminAxiosInstance from "@/config/AdminAxiosInstence";
-import { ILoanApplicationResponse } from "@/interfaces/interfaces";
 
 
 export const applicationService = {
   getApplicationById: async (id: string) => {
-    const response = await adminAxiosInstance.get<ILoanApplicationResponse>(
+    const response = await adminAxiosInstance.get(
       `/application/${id}`
     );
     return response; // Returning the full response object

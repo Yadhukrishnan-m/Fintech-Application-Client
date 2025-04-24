@@ -8,11 +8,17 @@ import { Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { applicationService } from "@/api/admin/ApplicationServices";
 
+
+
+interface ILoanApplicationWithExtra extends ILoanApplication {
+  averageMonthlyEmi: number;
+  monthlyIncome: number;
+}
 function ApplicationDetailsPage() {
   const { id } = useParams();
-  const [application, setApplication] = useState<ILoanApplication | undefined>(
-    undefined
-  );
+  const [application, setApplication] = useState<
+    ILoanApplicationWithExtra | undefined
+  >(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

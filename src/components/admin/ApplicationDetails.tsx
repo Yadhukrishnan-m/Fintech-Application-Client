@@ -24,72 +24,93 @@ import { useNavigate } from "react-router-dom";
 import { ErrorToast, SuccessToast } from "../shared/Toast";
 import { AxiosError } from "axios";
 import { applicationService } from "@/api/admin/ApplicationServices";
+
+interface ILoanApplicationWithExtras extends ILoanApplication {
+  averageMonthlyEmi: number;
+  monthlyIncome: number;
+}
+
 interface ApplicationDetailsProps {
-  applicationData: ILoanApplication;
+  applicationData: ILoanApplicationWithExtras;
 }
 
 export default function ApplicationDetails({
   applicationData,
 }: ApplicationDetailsProps) {
-   
-    
-  const [application,] =
-    useState<ILoanApplication>(applicationData);
-const [loading, setLoading] = useState(false);
+  const [application] = useState<ILoanApplicationWithExtras>(applicationData);
+  const [loading, setLoading] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectionForm, setShowRejectionForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [actionType, setActionType] = useState<"approve" | "reject" | null>(
-      null
-    );
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(
+    null
+  );
   const navigate = useNavigate();
   const confirmApproval = async () => {
-      try {
-        let payload
-setLoading(true)
-        if (actionType==='approve') {
-            payload = { status: "approved" };
-        }else
-
-        if (actionType === "reject") {
-          payload = { status: "rejected", message: rejectionReason };
-        }else{
-          return
-        }
-
-        const response = await applicationService.verifyApplication(
-          application._id,
-          payload
-        );
-
-
-        if (response.data.success) {
-            SuccessToast('successfully updated')
-          navigate("/admin/application");
-        }
-      } catch (error) {
-        console.log(error);
-       if (error instanceof AxiosError) {
-               ErrorToast(error.response!.data.message);
-              
-             }
-      } finally {
-        setIsAlertOpen(false);
-        setLoading(false);
+    try {
+      let payload;
+      setLoading(true);
+      if (actionType === "approve") {
+        payload = { status: "approved" };
+      } else if (actionType === "reject") {
+        payload = { status: "rejected", message: rejectionReason };
+      } else {
+        return;
       }
+
+      const response = await applicationService.verifyApplication(
+        application._id,
+        payload
+      );
+
+      if (response.data.success) {
+        SuccessToast("successfully updated");
+        navigate("/admin/application");
+      }
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        ErrorToast(error.response!.data.message);
+      }
+    } finally {
+      setIsAlertOpen(false);
+      setLoading(false);
+    }
   };
   const handleApprove = () => {
-   setActionType("approve");
-  setIsAlertOpen(true);
+    setActionType("approve");
+    setIsAlertOpen(true);
   };
 
+  // Check if EMI is greater than salary
+  
+
+  // Check repayment risk level
+  const emiToIncomeRatio =
+    application.averageMonthlyEmi / application.monthlyIncome;
+  let riskLevel: "high" | "medium" | "low" = "low";
+
+  if (emiToIncomeRatio > 0.5) {
+    riskLevel = "high";
+  } else if (emiToIncomeRatio > 0.3) {
+    riskLevel = "medium";
+  }
+
   const handleReject = () => {
-   if (!rejectionReason.trim()) return;
-  setActionType("reject");
-  setIsAlertOpen(true)
- setShowRejectionForm(false);
-    
+    if (!rejectionReason.trim()) return;
+    setActionType("reject");
+    setIsAlertOpen(true);
+    setShowRejectionForm(false);
+  };
+
+  // Format currency function
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
@@ -113,16 +134,18 @@ setLoading(true)
     }
   };
 
-  if(loading)return (
-    <div className="flex justify-center items-center h-96">
-      <Loader2 className="h-8 w-8 text-teal-600 animate-spin" />
-      <span className="ml-2 text-teal-600">updating aplication status ...</span>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-96">
+        <Loader2 className="h-8 w-8 text-teal-600 animate-spin" />
+        <span className="ml-2 text-teal-600">
+          updating aplication status ...
+        </span>
+      </div>
+    );
 
   return (
     <div className="container mx-auto p-1 max-w-8xl">
-        
       <Card className="border-teal-1 border-t-4 shadow-lg overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-teal-50 to-white">
           <div className="flex justify-between items-center">
@@ -137,6 +160,66 @@ setLoading(true)
             <div>{getStatusBadge(application.status)}</div>
           </div>
         </CardHeader>
+
+        {riskLevel === "high" && (
+          <div className="mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
+            <div className="flex items-start">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-red-700">
+                  High Risk Application
+                </h4>
+                <p className="text-red-600 mt-1">
+                  Average monthly EMI (
+                  {formatCurrency(application.averageMonthlyEmi)}) exceeds{" "}
+                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                  {formatCurrency(application.monthlyIncome)}). This application
+                  poses a high repayment risk.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {riskLevel === "medium" && (
+          <div className="mb-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div className="flex items-start">
+              <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-amber-700">
+                  Medium Risk Application
+                </h4>
+                <p className="text-amber-600 mt-1">
+                  Average monthly EMI (
+                  {formatCurrency(application.averageMonthlyEmi)}) is{" "}
+                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                  {formatCurrency(application.monthlyIncome)}). Borrower may
+                  face financial strain during repayment.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {riskLevel === "low" && (
+          <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex items-start">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-green-700">
+                  Low Risk Application
+                </h4>
+                <p className="text-green-600 mt-1">
+                  Average monthly EMI (
+                  {formatCurrency(application.averageMonthlyEmi)}) is only{" "}
+                  {(emiToIncomeRatio * 100).toFixed(1)}% of monthly income (
+                  {formatCurrency(application.monthlyIncome)}). Applicant has
+                  strong repayment capacity.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -189,9 +272,7 @@ setLoading(true)
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">IFSC CODE:</span>
-                  <span className="font-medium">
-                    {application.ifscCode}
-                  </span>
+                  <span className="font-medium">{application.ifscCode}</span>
                 </div>{" "}
                 <div className="flex justify-between">
                   <span className="text-gray-500">Income:</span>
