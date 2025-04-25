@@ -77,7 +77,11 @@ const fetchUser = useCallback(async () => {
       {user?.status === "verified" && (
         <VerifiedProfileDetails
           userData={user as VerifiedUserData}
-          setUser={setUser}
+          setUser={
+            setUser as React.Dispatch<
+              React.SetStateAction<VerifiedUserData | null>
+            >
+          }
         />
       )}
     </div>
