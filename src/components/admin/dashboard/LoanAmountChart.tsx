@@ -71,7 +71,7 @@ export function LoanAmountChart() {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
-              <YAxis tickFormatter={(val) => `$${val}`} />
+              <YAxis tickFormatter={(val) => `₹ ${val}`} />
               <Tooltip
                 formatter={(value: number) => [formatCurrency(value)]}
                 contentStyle={{
