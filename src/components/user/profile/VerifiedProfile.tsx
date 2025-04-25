@@ -8,6 +8,7 @@ import {
   Shield,
   Award,
   Lock,
+  IndianRupee,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -50,7 +51,7 @@ interface User {
 
 interface VerifiedProfileDetailsProps {
   userData: VerifiedUserData;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: React.Dispatch<React.SetStateAction<VerifiedUserData | null>>;
 }
 
 export default function VerifiedProfileDetails({
@@ -162,7 +163,7 @@ export default function VerifiedProfileDetails({
             <div>
               <p className="text-sm text-gray-500">Annual Income</p>
               <p className="font-medium text-gray-800 flex items-center">
-                <DollarSign className="h-4 w-4 mr-1 text-teal-600" />₹
+                <IndianRupee className="h-4 w-4 mr-1 text-teal-600" />
                 {userData.income.toLocaleString()}
               </p>
             </div>
