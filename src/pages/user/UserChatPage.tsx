@@ -92,6 +92,8 @@ export default function UserChatPage() {
       }
       
         try {
+          console.log(message);
+          
               const response = await chatServices.sendMessage(message);
 
 
