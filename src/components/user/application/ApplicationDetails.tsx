@@ -22,6 +22,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { ILoanApplication } from "@/interfaces/interfaces";
+import { Button } from "@/components/ui/button";
+import AlertDialog from "@/components/shared/AlertDialog";
+import { AxiosError } from "axios";
+import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
+import userAxiosInstance from "@/config/UserAxiosInstence";
 
 interface ApplicationDetailsCardProps {
   applicationData: ILoanApplication;
@@ -33,15 +38,17 @@ export default function ApplicationDetailsCard({
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedDocName, setSelectedDocName] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen]=useState(false)
 
   // Destructure application data
+  let {status}=applicationData
   const {
     applicationId,
     createdAt,
     amount,
     interest,
     tenure,
-    status,
+    
     message,
     duePenalty,
     documents,
@@ -73,6 +80,29 @@ export default function ApplicationDetailsCard({
         return <Clock className="h-5 w-5 text-amber-500" />;
     }
   };
+
+ async function  handleLogoutConfirm(){
+
+  try {
+   const responce= await userAxiosInstance.get(
+      `/application/cancel-application/${applicationData._id}`
+    );
+    if (responce.data.success) {
+      status='cancelled'
+      SuccessToast('responce.data.success')
+    }
+
+    
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      ErrorToast(error.response.data.message);
+    } else {
+      ErrorToast("An unknown error occurred.");
+    }
+  } finally {
+   setIsAlertOpen(false)
+  }
+ }
 
   return (
     <Card className="w-full max-w-7xl shadow-xl border-0 overflow-hidden bg-white">
@@ -175,7 +205,9 @@ export default function ApplicationDetailsCard({
                     <p className="text-sm text-gray-500">Due Penalty</p>
                     <div className="flex items-center gap-2">
                       <Percent className="h-5 w-5 text-teal-600" />
-                      <p className="text-2xl font-bold text-gray-800">{duePenalty}</p>
+                      <p className="text-2xl font-bold text-gray-800">
+                        {duePenalty}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -198,7 +230,8 @@ export default function ApplicationDetailsCard({
                     Approval Information
                   </h4>
                   <p className="text-emerald-600 text-sm">
-                    Your loan has been approved. money is transfered ti account .No:- {accountNumber }
+                    Your loan has been approved. money is transfered ti account
+                    .No:- {accountNumber}
                   </p>
                 </div>
               )}
@@ -209,10 +242,25 @@ export default function ApplicationDetailsCard({
                     <Clock className="h-5 w-5" />
                     Application Status
                   </h4>
-                  <p className="text-amber-600 text-sm">
+                  <p className="text-amber-600 text-sm mb-4">
                     Your application is currently under review. We will notify
                     you once a decision has been made.
                   </p>
+                  <Button
+                    variant="destructive"
+                    className="w-full md:w-auto flex items-center gap-2"
+                    onClick={()=>setIsAlertOpen(true)}
+                  >
+                    <X className="h-4 w-4" />
+                    Cancel Application
+                  </Button>
+                  <AlertDialog
+                    isOpen={isAlertOpen}
+                    onConfirm={handleLogoutConfirm}
+                    onClose={() => setIsAlertOpen(false)}
+                    title="Confirm cancel "
+                    message="Are you sure you want to cancel the application?"
+                  />
                 </div>
               )}
             </div>
