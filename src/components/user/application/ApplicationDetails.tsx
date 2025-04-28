@@ -1,108 +1,113 @@
- ;
+  ;
 
-import { useState } from "react";
-import {
-  Banknote,
-  Calendar,
-  Check,
-  Clock,
-  FileText,
-  Info,
-  Percent,
-  Timer,
-  X,
-} from "lucide-react";
+  import { useState } from "react";
+  import {
+    Banknote,
+    Calendar,
+    Check,
+    Clock,
+    FileText,
+    Info,
+    Percent,
+    Timer,
+    X,
+  } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import type { ILoanApplication } from "@/interfaces/interfaces";
-import { Button } from "@/components/ui/button";
-import AlertDialog from "@/components/shared/AlertDialog";
-import { AxiosError } from "axios";
-import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
-import userAxiosInstance from "@/config/UserAxiosInstence";
+  import { Badge } from "@/components/ui/badge";
+  import { Card, CardContent } from "@/components/ui/card";
+  import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+  } from "@/components/ui/dialog";
+  import type { ILoanApplication } from "@/interfaces/interfaces";
+  import { Button } from "@/components/ui/button";
+  import AlertDialog from "@/components/shared/AlertDialog";
+  import { AxiosError } from "axios";
+  import { ErrorToast, SuccessToast } from "@/components/shared/Toast";
+  import userAxiosInstance from "@/config/UserAxiosInstence";
 
-interface ApplicationDetailsCardProps {
-  applicationData: ILoanApplication;
-}
-
-export default function ApplicationDetailsCard({
-  applicationData,
-}: ApplicationDetailsCardProps) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedDocName, setSelectedDocName] = useState<string | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAlertOpen, setIsAlertOpen]=useState(false)
-
-  // Destructure application data
-  let {status}=applicationData
-  const {
-    applicationId,
-    createdAt,
-    amount,
-    interest,
-    tenure,
-    
-    message,
-    duePenalty,
-    documents,
-    accountNumber,
-    
-  } = applicationData;
-
-  // Format the amount with Indian Rupee symbol and thousands separator
-  const formattedAmount = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-
-  // Format the date
-  const formattedDate = new Date(createdAt).toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-  const getStatusIcon = () => {
-    switch (status) {
-      case "approved":
-        return <Check className="h-5 w-5 text-emerald-500" />;
-      case "rejected":
-        return <X className="h-5 w-5 text-rose-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-amber-500" />;
-    }
-  };
-
- async function  handleLogoutConfirm(){
-
-  try {
-   const responce= await userAxiosInstance.get(
-      `/application/cancel-application/${applicationData._id}`
-    );
-    if (responce.data.success) {
-      status='cancelled'
-      SuccessToast(responce.data.message)
-    }
-
-    
-  } catch (error) {
-    if (error instanceof AxiosError && error.response?.data?.message) {
-      ErrorToast(error.response.data.message);
-    } else {
-      ErrorToast("An unknown error occurred.");
-    }
-  } finally {
-   setIsAlertOpen(false)
+  interface ApplicationDetailsCardProps {
+    applicationData: ILoanApplication;
   }
- }
+
+  export default function ApplicationDetailsCard({
+    applicationData,
+  }: ApplicationDetailsCardProps) {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedDocName, setSelectedDocName] = useState<string | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isAlertOpen, setIsAlertOpen]=useState(false)
+    const [localApplicationData, setLocalApplicationData] =
+      useState(applicationData);
+
+
+    // Destructure application data
+   
+   const {
+     applicationId,
+     createdAt,
+     amount,
+     interest,
+     tenure,
+     message,
+     duePenalty,
+     documents,
+     accountNumber,
+     status, // now status from local state
+   } = localApplicationData;
+
+    // Format the amount with Indian Rupee symbol and thousands separator
+    const formattedAmount = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amount);
+
+    // Format the date
+    const formattedDate = new Date(createdAt).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const getStatusIcon = () => {
+      switch (status) {
+        case "approved":
+          return <Check className="h-5 w-5 text-emerald-500" />;
+        case "rejected":
+          return <X className="h-5 w-5 text-rose-500" />;
+        default:
+          return <Clock className="h-5 w-5 text-amber-500" />;
+      }
+    };
+
+  async function  handleLogoutConfirm(){
+
+    try {
+    const response= await userAxiosInstance.get(
+        `/application/cancel-application/${applicationData._id}`
+      );
+       if (response.data.success) {
+         setLocalApplicationData((prev) => ({
+           ...prev,
+           status: "cancelled",
+         }));
+         SuccessToast(response.data.message);
+       }
+
+      
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        ErrorToast(error.response.data.message);
+      } else {
+        ErrorToast("An unknown error occurred.");
+      }
+    } finally {
+    setIsAlertOpen(false)
+    }
+  }
 
   return (
     <Card className="w-full max-w-7xl shadow-xl border-0 overflow-hidden bg-white">
