@@ -89,7 +89,7 @@ export default function ApplicationDetailsCard({
     );
     if (responce.data.success) {
       status='cancelled'
-      SuccessToast('responce.data.success')
+      SuccessToast(responce.data.message)
     }
 
     
