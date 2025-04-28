@@ -129,6 +129,7 @@ export default function ApplicationDetails({
         return <Badge className="bg-emerald-500">Approved</Badge>;
       case "rejected":
         return <Badge className="bg-red-500">Rejected</Badge>;
+        case "cancelled": return <Badge className="bg-red-500">Cancelled</Badge>;
       default:
         return <Badge className="bg-amber-500">Pending</Badge>;
     }
